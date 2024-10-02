@@ -1,0 +1,1 @@
+function t(t){return(n,o)=>function(t,n,o){const r=n&&"string"==typeof n?`${t}__${n}`:t,e=void 0===n||"string"==typeof n?o:n;return e?Object.keys(e).reduce(((t,n)=>e[n]?`${t} ${r}--${n}`:t),r):r}(t,n,o)}export{t as m};

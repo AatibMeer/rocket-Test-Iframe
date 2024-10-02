@@ -1,0 +1,1 @@
+function r(r){if(r<1)throw new RangeError(`Trying to generate a random hex string whose length is ${r}. Length must be greater than 1.`);const e=new Array(r);for(let r=0;r<e.length;r+=1)e[r]=(16*Math.random()|0).toString(16);return e.join("")}export{r};

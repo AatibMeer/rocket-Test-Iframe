@@ -1,0 +1,1 @@
+function n(n){return"function"==typeof n&&"function"==typeof n.call}function t(t){return n(t.reportValidity)}export{t as h,n as i};

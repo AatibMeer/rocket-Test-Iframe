@@ -1,0 +1,1 @@
+import{i as a,l as e}from"./p-caddc234.js";import{h as n}from"./p-8d6e32e8.js";async function s(s,r){return await e(),a.addResourceBundle("dev",s,r),{i18n:a.cloneInstance({ns:s,defaultNS:s}),I18n:a=>n("rl-i18n",Object.assign({namespace:s},a))}}export{s};

@@ -1,0 +1,58 @@
+@if (highlight && !customTextValue && !focused) {
+  <div #indicator [style.top]="getIndicatorTopPosition()" class="indicator-arrow">
+    <span class="rl-icon pencil"></span>
+  </div>
+}
+<div class="custom-text-container"
+  #customTextContainer
+  (click)="focusInput()"
+  [class.disabled]="partyAssignedToInput.reference != currentPartyRef"
+  [ngStyle]="{'height': styles.height, 'top': styles.top, 'left': styles.left, 'width': styles.width}">
+  <div #wrapper
+    class="custom-text-wrapper"
+    [ngStyle]="{'border': styles.border}"
+    [style.border-color]="partyAssignedToInput.metaData.style.background"
+    [class.pulse]="highlightedInputClicks > 0 && highlightedInputClicks%2 == 0 && !customTextValue && highlight"
+    [class.second-pulse]="highlightedInputClicks > 0 && highlightedInputClicks%2 > 0 && !customTextValue && highlight"
+    [class.show-signature-error]="highlightedInputClicks > 0 && highlightedInputClicks%2 > 0 && !customTextValue && highlight && redOutline">
+    <!-- <div class="transparent-background"></div> -->
+    <textarea #textarea
+      name="message"
+      [ngStyle]="setCustomTextStyle()"
+      class="custom-text-textarea"
+      (focus)="onFocus()"
+      (focusout)="onFocusOut()"
+      (keyup)="onKeyup()"
+      [maxLength]="maxLength"
+      [(ngModel)]="input.value"
+      #message='ngModel'
+      name="custom-text-field">
+    </textarea>
+    @if (focused || input.value) {
+      <div
+        class="text-right"
+        [style.color]="partyAssignedToInput.metaData.style.background">
+        {{input.value ? input.value.length : 0}}/{{maxLength}}
+      </div>
+    }
+    <div #prompt [ngStyle]="{'font-size': dynamicFontSize + 'px'}" [class.hidden]="input.optional || input.value" class="prompt">{{input.prompt ? input.prompt : ''}}</div>
+    @if (!input.prompt) {
+      <div
+        #promptOptional
+        [ngStyle]="{'font-size': dynamicFontSize + 'px'}"
+        [class.hidden]="!input.optional || input.value"
+        [comContent]="'custom-text-component_optional-no-prompt'"
+        class="prompt">
+      </div>
+    }
+    @if (input.prompt) {
+      <div
+        #promptOptional [ngStyle]="{'font-size': dynamicFontSize + 'px'}"
+        [class.hidden]="!input.optional || input.value"
+        [comContent]="'custom-text-component_optional-prompt'"
+        [params]="{prompt: input.prompt}"
+        class="prompt">
+      </div>
+    }
+  </div>
+</div>

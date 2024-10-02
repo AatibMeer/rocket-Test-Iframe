@@ -1,0 +1,16 @@
+<rl-modal fakePath="payment/choosePayInMethod" rl-test="payment-method">
+  <rl-modal-header-branded product="wallet">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="rl-icon card" role="presentation"></i>
+      {{ 'payment-payment-method-modal.heading' | translate }}
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <p rl-modal-body-part="heroText" rl-typography="bold" translate [translateParams]="{payeeName: payeeName}">payment-payment-method-modal.hero</p>
+    <rl-pay-method-selector rl-test="method-selector" [personID]="personID"></rl-pay-method-selector>
+    <div [hidden]="!hasPaymentMethod" rl-modal-body-part="actionsContainer">
+      <button class="btn btn-primary" rl-test="continue-button" rl-modal-body-part="primaryAction" (click)="openPayConfirmModal()">{{ 'payment-payment-method-modal.cta' | translate }}</button>
+    </div>
+  </rl-modal-body>
+</rl-modal>

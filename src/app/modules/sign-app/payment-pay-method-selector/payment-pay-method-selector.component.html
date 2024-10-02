@@ -1,0 +1,32 @@
+<div [class]="bem()">
+  @for (method of methods; track method) {
+    <rl-pay-method-summary
+      [class]="bem('method')"
+      rl-test="pay-method"
+      name="{{ method.name }}"
+      logo="{{ method.logo }}"
+      identifier="{{ method.last4 }}"
+      checked="{{ method === this.selectedMethod }}"
+      (change)="handleMethodChange(method)"
+    >{{ method.name }}</rl-pay-method-summary>
+  }
+  @if (featureFlagService.flags.wallet_enabled) {
+    <button
+      class="btn btn-secondary {{bem('add-method')}}"
+      (click)="useRocketWallet()"
+      rl-test="use-rocket-wallet"
+      ><i class="rl-icon check"></i> <span translate>payment-pay-method-selector.use-wallet</span></button>
+    }
+    @if (featureFlagService.flags.pay_with_bank_account && paymentMethodType === 'bank') {
+      <button
+        class="btn btn-secondary {{bem('add-method')}}"
+        rl-test="add-bank-account" (click)="openAddBankAccountModal()"
+        ><i class="rl-icon add"></i> <span translate>payment-pay-method-selector.add-bank-account</span></button>
+      }
+      @if (paymentMethodType === 'card') {
+        <button
+          class="btn btn-secondary {{bem('add-method')}}"
+          rl-test="add-card" (click)="openPayByCardModal()"
+          ><i class="rl-icon add"></i> <span translate>payment-pay-method-selector.add-card</span></button>
+        }
+      </div>

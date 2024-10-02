@@ -1,0 +1,52 @@
+<rl-modal fakePath="editParty" rl-test="edit-party">
+  <rl-modal-header-branded product="sign">
+    <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    <h1 [class]="bem('title')" rl-modal-title rl-typography="heading">
+      <i class="rl-icon {{ isNewParty ? 'addsigner' : 'settings' }}" role="presentation"></i>
+      {{ heading }}
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div>
+      <div
+        [class]="bem('party-bar')"
+        [ngStyle]="{backgroundColor: partyColor}"
+        role="presentation"
+      ></div>
+      @if (heroKey | translate) {
+        <div
+          [class]="bem('hero-text')"
+          rl-modal-body-part="heroText"
+          rl-typography="bold"
+        >{{ heroKey | translate }}</div>
+      }
+    </div>
+    <form [formGroup]="formGroup" rl-modal-body-part="container" (ngSubmit)="onSubmit()">
+      <rl-party-edit-form
+        [nameErrorMessages]="{required: 'edit-party-modal.name-required' | translate}"
+        [emailErrorMessages]="{required: 'edit-party-modal.email-required' | translate, email: 'edit-party-modal.email-required' | translate, uniquePartyEmail: 'edit-party-modal.email-already-in-use' | translate}"
+        rl-modal-body-part="container"
+      ></rl-party-edit-form>
+      @if (canDelete) {
+        <button class="btn btn-secondary"
+          (click)="deleteParty.emit()"
+          rl-modal-body-part="tertiaryButton"
+          rl-test="deleteButton"
+          type="button"
+          >
+          <i class="rl-icon trash-bin {{bem('delete-icon')}}" role="presentation"></i>
+          {{ 'edit-party-modal.delete' | translate }}
+        </button>
+      }
+      <div rl-modal-body-part="actionsContainer">
+        <button class="btn btn-primary"
+          rl-modal-body-part="primaryAction"
+          rl-test="submitButton"
+          type="submit"
+        >{{ (isNewParty ? 'edit-party-modal.submit-new' : 'edit-party-modal.submit-edit') | translate }}</button>
+      </div>
+    </form>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

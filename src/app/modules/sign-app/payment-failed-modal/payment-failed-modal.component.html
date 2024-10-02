@@ -1,0 +1,19 @@
+<rl-modal fakePath="payment/payInFailed" rl-test="payment-failed-modal">
+    <rl-modal-header-branded product="wallet">
+        <h1 rl-modal-title rl-typography="heading" translate>payment-failed-modal.heading</h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded>
+    <rl-modal-body>
+        <p rl-modal-description rl-modal-body-part="heroText" class="bold-700" rl-test="payment-failed-modal-hero" translate>payment-failed-modal.hero</p>
+        <p rl-modal-body-part="regularContent" rl-test="payment-failed-modal-description" translate>payment-failed-modal.description</p>
+        <div rl-modal-body-part="actionsContainer">
+            <button
+                    class="btn btn-primary"
+                    (click)="close()"
+                    rl-modal-body-part="primaryAction"
+                    rl-test="payment-status-cta"
+                    translate
+            >payment-failed-modal.cta</button>
+        </div>
+    </rl-modal-body>
+</rl-modal>

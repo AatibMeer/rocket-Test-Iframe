@@ -1,0 +1,112 @@
+@if (highlight) {
+  <div #indicator class="indicator-arrow" [style.top]="getIndicatorTopPosition()">
+    <span class="rl-icon pencil"></span>
+  </div>
+}
+<div #wrapper
+  class="signature-input-wrapper"
+  (click)="onClick($event)"
+  [class.editable]="!!input.value"
+  [class.datepicker-overflow-visible]="input.type == 'DATE_SIGNED'"
+  [ngStyle]="styles"
+  [style.border-color]="this.partyAssignedToInput.metaData.style.background"
+  [class.pulse]="highlightedInputClicks > 0 && highlightedInputClicks%2 == 0 && highlight"
+  [class.second-pulse]="highlightedInputClicks > 0 && highlightedInputClicks%2 > 0 && highlight"
+  [class.show-signature-error]="highlightedInputClicks > 0 && !input.value && highlight && redOutline"
+  [class.disabled]="partyAssignedToInput.reference != currentPartyRef"
+  [class.on-top]="showDatePicker">
+  <div [ngStyle]="{'background-color': partyAssignedToInput.metaData.style.background}" class="transparent-background"></div>
+  @if (!input.value && input.type != 'DATE_SIGNED') {
+    <span
+      [class.initials-input]="input.type == 'INITIALS'"
+      [style.color]="this.partyAssignedToInput.metaData.style.background"
+      class="signature-placeholder">
+      <span class="icon-wrapper">
+        @if (input.type == 'SIGNATURE_TEXT') {
+          <span
+            [ngStyle]="{'color': partyAssignedToInput.metaData.style.background, 'font-size' : this.iconFontSizes[input.type]}"
+            class="rl-icon toolbar-signature">
+          </span>
+        }
+        @if (input.type == 'INITIALS') {
+          <span
+            [ngStyle]="{'color': partyAssignedToInput.metaData.style.background, 'font-size' : this.iconFontSizes[input.type]}"
+            class="rl-icon toolbar-initial">
+          </span>
+        }
+        @if (input.type == 'CUSTOM_TEXT') {
+          <span
+            [ngStyle]="{'color': partyAssignedToInput.metaData.style.background, 'font-size' : this.iconFontSizes[input.type]}"
+            class="rl-icon textbox-icon-24px">
+          </span>
+        }
+      </span>
+      <span class="content-wrapper" #placeholderWrapper>
+        <span class="legal-name"
+          [ngStyle]="{'color' : partyAssignedToInput.metaData.style.background}"
+          [fittext]="true"
+          [activateOnResize]="true"
+          [modelToWatch]="partyAssignedToInput.legalName"
+          [minFontSize]="6"
+          [maxFontSize]="20"
+          [container]="this.placeholderWrapper.nativeElement">
+        {{this.inputLabel}}</span>
+      </span>
+    </span>
+  }
+  @if (!!input.value && input.valueType != 'IMAGE') {
+    <span
+      [fittext]="true"
+      [activateOnResize]="true"
+      [modelToWatch]="input.value"
+      [minFontSize]="6"
+      [maxFontSize]="input.type == 'DATE_SIGNED' ? 18 : 42"
+      [container]="this.wrapper.nativeElement"
+      #signatureInputValue
+      [ngStyle]="font"
+      class="signature-value">
+      {{input.value}}
+    </span>
+  }
+  @if (!input.value) {
+    <span
+      [ngStyle]="{'color' : partyAssignedToInput.metaData.style.background}"
+      [fittext]="true"
+      [minFontSize]="6"
+      [activateOnResize]="true"
+      [modelToWatch]="currentDate"
+      [container]="this.wrapper.nativeElement"
+      [maxFontSize]="input.type == 'DATE_SIGNED' ? 18 : 42"
+      class="signature-value date-placeholder">
+      {{currentDate}}
+    </span>
+  }
+  <img class="sig-image" [class.hidden]="!input.value" #svgSignature [src]="svgUrl" />
+  @if (!!input.value) {
+    <span class="rl-icon img-edit"></span>
+  }
+  @if (showDatePicker) {
+    <form>
+      <rl-date-input [formControl]="date" [dateFormat]="requestedDateFormat" [locale]="datepickerLanguage" [options]="options" (rl-clickOutside)="showDatePicker = false"></rl-date-input>
+    </form>
+  }
+</div>
+
+<!-- this is used to simulate the signature with px based dimensions so that we can scale the font size and submit it to SignAPI -->
+@if (input.valueType != 'IMAGE') {
+  <div #simulationWrapper
+    [ngStyle]="simulationStyles"
+    class="simulation-wrapper">
+    <div #simulationInputValue
+      [attr.data-input-id]="this.input.id"
+      [fittext]="true"
+      [activateOnResize]="true"
+      [modelToWatch]="input.value"
+      [minFontSize]="6"
+      [maxFontSize]="maxFontSize"
+      [container]="this.simulationWrapper.nativeElement"
+      [ngStyle]="font">
+      {{input.value}}
+    </div>
+  </div>
+}

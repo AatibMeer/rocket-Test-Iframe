@@ -1,0 +1,8 @@
+<rl-lightbox [visible]="true">
+  @if (showSpinner) {
+    <div class="overlay">
+      <rl-working-indicator size="large"></rl-working-indicator>
+    </div>
+  }
+  <rl-payment-plaid [additionalOAuthStorageData]="{ plaidRedirectRoute: 'payment/bankPayout' }" (loaded)="onLoaded()" (error)="onError()" (exit)="onExit()" (success)="onSuccess($event.publicToken, $event.metadata)"></rl-payment-plaid>
+</rl-lightbox>

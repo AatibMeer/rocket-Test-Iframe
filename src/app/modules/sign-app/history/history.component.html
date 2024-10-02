@@ -1,0 +1,378 @@
+<rl-modal fakePath="history" rl-test="history-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon document" role="presentation"></i>
+      <span translate>history-panel_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <div class="details-wrapper">
+        <div class="panel-heading">
+          <span><com [key]="'history-panel_binder-heading'"></com></span>
+        </div>
+        <div class="binder-details-content">
+          <div class="binder-details" rl-typography="small">
+            <div>
+              <span><com [key]="'history-panel_binder-files'"></com></span>&nbsp;
+            </div>
+            <div class="binder-files-list">
+              @for (file of binder.documents; track file) {
+                <span>{{file.name}}</span>
+              }
+            </div>
+          </div>
+          <div class="binder-details" rl-typography="small">
+            <div>
+              <span><com [key]="'history-panel_binder-status'"></com></span>&nbsp;
+            </div>
+            <div>
+              @if (binder.status == 'IN_PREPARATION') {
+                <span><com [key]="'history-panel_binder-status-preparation'"></com></span>
+              }
+              @if (binder.status == 'SIGN_IN_PROGRESS') {
+                <span><com [key]="'history-panel_binder-status-progress'"></com></span>
+              }
+              @if (binder.status == 'SIGN_COMPLETED') {
+                <span><com [key]="'history-panel_binder-status-complete'"></com></span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="history-wrapper">
+        <div class="panel-heading">
+          <span><com [key]="'history-panel_events-heading'"></com></span>
+        </div>
+        <div class="history-entries">
+          <ul class="history-entry list-unstyled">
+            @for (event of documentEvents; track event.id) {
+              <li rl-typography="small">
+                <div class="event-icon">
+                  @switch (event.type) {
+                    @case ('BINDER_CREATED') {
+                      <span class="rl-icon created"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-created'"></span>
+                    }
+                    @case ('BINDER_DOCUMENT_CHANGED') {
+                      <span class="rl-icon settings"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-edited'"></span>
+                    }
+                    @case ('INVITATION_TO_SIGN_SENT') {
+                      <span class="rl-icon action"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-invitation'"></span>
+                    }
+                    @case ('VIEWER_INVITED') {
+                      <span class="rl-icon action"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-invitation'"></span>
+                    }
+                    @case ('BINDER_VIEWED') {
+                      <span class="rl-icon eye"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-viewed'"></span>
+                    }
+                    @case ('BINDER_SIGNED') {
+                      <span class="rl-icon signed"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-signed'"></span>
+                    }
+                    @case ('BINDER_DOWNLOADED') {
+                      <span class="rl-icon download-document"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-downloaded'"></span>
+                    }
+                    @case ('BINDER_PRINTED') {
+                      <span class="rl-icon print"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-printed'"></span>
+                    }
+                    @case ('SIGN_REMINDER_SENT') {
+                      <span class="rl-icon reminder"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-reminder'"></span>
+                    }
+                    @case ('BINDER_CANCELED') {
+                      <span class="rl-icon declined-to-sign"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-cancelled'"></span>
+                    }
+                    @case ('SIGNER_DECLINED_TO_SIGN') {
+                      <span class="rl-icon declined-to-sign"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-declined'"></span>
+                    }
+                    @case ('VIEWER_REMOVED_FROM_BINDER') {
+                      <span class="rl-icon declined-to-sign"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-cancelled'"></span>
+                    }
+                    @case ('BINDER_SIGN_COMPLETED') {
+                      <span class="rl-icon completed"></span>
+                      <span [comContent]="'history-panel_binder-icon-caption-completed'"></span>
+                    }
+                  }
+                </div>
+                <div rl-typography="small" class="date">
+                  <span>{{event.occurredAt | date: binder.dateFormat}}</span>
+                  <span>{{event.occurredAt | date: 'hh:mma'}}</span>
+                </div>
+                @if (numberOfDocs == 1) {
+                  <div class="description">
+                    @switch (event.type) {
+                      @case ('BINDER_CREATED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email: event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-created-singular' :
+                                    'history-panel_binder-created-singular-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_DOCUMENT_CHANGED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email: event.details.email}"
+                                      [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-edited-singular' :
+                                    'history-panel_binder-edited-singular-alt'">
+                        </span>
+                      }
+                      @case ('INVITATION_TO_SIGN_SENT') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email: event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_invitation-to-sign-sent-singular' :
+                                    'history-panel_invitation-to-sign-sent-singular-alt'">
+                        </span>
+                      }
+                      @case ('VIEWER_INVITED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email: event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_invitation-to-view-sent-singular' :
+                                    'history-panel_invitation-to-view-sent-singular-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_VIEWED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-viewed-singular' :
+                                    'history-panel_binder-viewed-singular-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_SIGNED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-signed-singular' :
+                                    'history-panel_binder-signed-singular-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_DOWNLOADED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-downloaded-singular' :
+                                    'history-panel_binder-downloaded-singular-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_PRINTED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-printed-singular' :
+                                    'history-panel_binder-printed-singular-alt'">
+                        </span>
+                      }
+                      @case ('SIGN_REMINDER_SENT') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-reminder-sent' :
+                                    'history-panel_binder-reminder-sent-alt'">
+                        </span>
+                      }
+                      @case ('VIEWER_REMOVED_FROM_BINDER') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_viewer-removed-singular' :
+                                    'history-panel_viewer-removed-singular-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_CANCELED') {
+                        <div>
+                          <span [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                        [comContent]="(event.details.legalName && event.details.email) ?
+                                        'history-panel_binder-canceled-singular' :
+                                        'history-panel_binder-canceled-singular-alt'">
+                          </span>
+                          @if (event.details.message) {
+                            <div>
+                              <span [comContent]="'history-panel_binder-reason'"></span> <q>{{event.details.message}}</q>
+                            </div>
+                          }
+                        </div>
+                      }
+                      @case ('SIGNER_DECLINED_TO_SIGN') {
+                        <div>
+                          <span [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                        [comContent]="(event.details.legalName && event.details.email) ?
+                                        'history-panel_signer-declined-to-sign-singular' :
+                                        'history-panel_signer-declined-to-sign-singular-alt'">
+                          </span>
+                          @if (event.details.message) {
+                            <div>
+                              <span [comContent]="'history-panel_binder-reason'"></span> <q>{{event.details.message}}</q>
+                            </div>
+                          }
+                        </div>
+                      }
+                      @case ('BINDER_SIGN_COMPLETED') {
+                        <div>
+                          <span [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                          [comContent]="(event.details.legalName && event.details.email) ?
+                                        'history-panel_binder-sign-completed-singular' :
+                                        'history-panel_binder-sign-completed-singular-alt'">
+                          </span>
+                          @if (event.details.message) {
+                            <div>
+                              <span [comContent]="'history-panel_binder-reason'"></span> <q>{{event.details.message}}</q>
+                            </div>
+                          }
+                        </div>
+                      }
+                    }
+                  </div>
+                }
+                @if (numberOfDocs > 1) {
+                  <div class="description">
+                    @switch (event.type) {
+                      @case ('BINDER_CREATED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-created-plural' :
+                                    'history-panel_binder-created-plural-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_DOCUMENT_CHANGED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                      [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-edited-plural' :
+                                    'history-panel_binder-edited-plural-alt'">
+                        </span>
+                      }
+                      @case ('INVITATION_TO_SIGN_SENT') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_invitation-to-sign-sent-plural' :
+                                    'history-panel_invitation-to-sign-sent-plural-alt'">
+                        </span>
+                      }
+                      @case ('VIEWER_INVITED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_invitation-to-view-sent-plural' :
+                                    'history-panel_invitation-to-view-sent-plural-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_VIEWED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-viewed-plural' :
+                                    'history-panel_binder-viewed-plural-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_SIGNED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-signed-plural' :
+                                    'history-panel_binder-signed-plural-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_DOWNLOADED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-downloaded-plural' :
+                                    'history-panel_binder-downloaded-plural-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_PRINTED') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-printed-plural' :
+                                    'history-panel_binder-printed-plural-alt'">
+                        </span>
+                      }
+                      @case ('SIGN_REMINDER_SENT') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_binder-reminder-sent' :
+                                    'history-panel_binder-reminder-sent-alt'">
+                        </span>
+                      }
+                      @case ('VIEWER_REMOVED_FROM_BINDER') {
+                        <span
+                          [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                    [comContent]="(event.details.legalName && event.details.email) ?
+                                    'history-panel_viewer-removed-plural' :
+                                    'history-panel_viewer-removed-plural-alt'">
+                        </span>
+                      }
+                      @case ('BINDER_CANCELED') {
+                        <div>
+                          <span [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                        [comContent]="(event.details.legalName && event.details.email) ?
+                                        'history-panel_binder-canceled-plural' :
+                                        'history-panel_binder-canceled-plural-alt'"></span>
+                          @if (event.details.message) {
+                            <div>
+                              <span [comContent]="'history-panel_binder-reason'"></span> <q>{{event.details.message}}</q>
+                            </div>
+                          }
+                        </div>
+                      }
+                      @case ('SIGNER_DECLINED_TO_SIGN') {
+                        <div>
+                          <span [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                        [comContent]="(event.details.legalName && event.details.email) ?
+                                        'history-panel_signer-declined-to-sign-plural' :
+                                        'history-panel_signer-declined-to-sign-plural-alt'"></span>
+                          @if (event.details.message) {
+                            <div>
+                              <span [comContent]="'history-panel_binder-reason'"></span> <q>{{event.details.message}}</q>
+                            </div>
+                          }
+                        </div>
+                      }
+                      @case ('BINDER_SIGN_COMPLETED') {
+                        <div>
+                          <span [params]="{name: event.details.legalName ? event.details.legalName : event.details.email, email:event.details.email}"
+                                          [comContent]="(event.details.legalName && event.details.email) ?
+                                        'history-panel_binder-sign-completed-plural' :
+                                        'history-panel_binder-sign-completed-plural-alt'"></span>
+                          @if (event.details.message) {
+                            <div>
+                              <span [comContent]="'history-panel_binder-reason'"></span> <q>{{event.details.message}}</q>
+                            </div>
+                          }
+                        </div>
+                      }
+                    }
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+      <div class="bottom-buttons">
+        <button (click)="hideModal.emit()" class="btn btn-primary">
+          <com [key]="'history-panel_button-close'"></com>
+        </button>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

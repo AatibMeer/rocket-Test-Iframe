@@ -1,0 +1,16 @@
+<rl-modal fakePath="addSignaturesSelectorModal" rl-test="payment-add-signature-after-payment-agreement">
+    <rl-modal-header>
+        <h1 rl-modal-title rl-typography="heading" translate>
+            add-signatures-selector-modal.header
+        </h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header>
+    <rl-modal-body>
+        <img class="sign-icon modal-default-icon-color" src="images/rocketsign-logo.svg">
+        <rl-add-signature-selector
+        (rlAddSignatureSelectorSelected)="onAddSignatureOptionSelected($event)"
+        [busy] = "busy"
+        rl-test="add-signature-selector-wc"
+        ></rl-add-signature-selector>
+    </rl-modal-body>
+</rl-modal>

@@ -1,0 +1,112 @@
+<rl-modal fakePath="payment/paymentAgreementDetails" rl-test="payment-status">
+  <rl-modal-header-branded product="wallet">
+    <h1 rl-modal-title rl-typography="heading" translate>payment-status.heading</h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    @if (isInterviewAgreement) {
+      <p [class]="bem('hero-text')" rl-modal-description rl-modal-body-part="heroText" class="bold-700" translate>payment-status.hero-confirm</p>
+      <p [class]="bem('handholding')" rl-modal-description>{{'payment-status.confirm-handholding' | translate:{docName: docName} }}</p>
+    } @else {
+      <p [class]="bem('hero-text')" rl-modal-description rl-modal-body-part="heroText" class="bold-700" translate>payment-status.hero</p>
+    }
+    @if (payer && payee) {
+      <div [class]="bem('avatar-panel')" role="presentation">
+        <rl-party-avatar [party]="payer" [title]="payer.legalName" rl-test="payment-status-avatar payment-status-avatar-payer"></rl-party-avatar>
+        <div class="rl-icon arrow-forward {{bem('avatar-arrows')}}"></div>
+        <rl-party-avatar [party]="payee" [title]="payee.legalName" rl-test="payment-status-avatar payment-status-avatar-payee"></rl-party-avatar>
+      </div>
+    }
+    <table rlTable [class]="bem('table')">
+      <tbody>
+        @if (showStatus) {
+          <tr rlTableRow="secondary" rl-test="payment-status-status-row">
+            <th [class]="bem('th')" rlTableHeader translate>payment-status.status-header</th>
+            @if (statusPillColor == 'primary') {
+              <td rlTableCell rl-test="payment-status-status">
+                <rl-pill color="primary" translate>{{ status }}</rl-pill>
+              </td>
+            }
+            @if (statusPillColor == 'happy') {
+              <td rlTableCell rl-test="payment-status-status">
+                <rl-pill color="happy" translate>{{ status }}</rl-pill>
+              </td>
+            }
+          </tr>
+        }
+        <tr rlTableRow>
+          <th [class]="bem('th')" rlTableHeader translate>payment-status.from-header</th>
+          <td rlTableCell rl-test="payment-status-from" [attr.data-pii]="'value'">{{ payer?.legalName }}</td>
+        </tr>
+        <tr rlTableRow>
+          <th [class]="bem('th')" rlTableHeader translate>payment-status.to-header</th>
+          <td rlTableCell rl-test="payment-status-to" [attr.data-pii]="'value'">{{ payee?.legalName }}</td>
+        </tr>
+        <tr rlTableRow>
+          <th [class]="bem('th')" rlTableHeader translate>payment-status.amount-header</th>
+          <td rlTableCell rl-test="payment-status-total">{{ paymentTotal | currency:paymentCurrency:'symbol':'1.2' }}</td>
+        </tr>
+        @if (!isInterviewAgreement) {
+          <tr rlTableRow>
+            <th [class]="bem('th')" rlTableHeader translate>payment-status.reference-id-header</th>
+            <td rlTableCell rl-test="reference-id" [attr.data-pii]="'value'">{{ referenceId }}</td>
+          </tr>
+        }
+        <tr rlTableRow>
+          <th [class]="bem('th')" rlTableHeader>
+            {{ 'payment-status.rate-header' | translate }}
+            <span rl-tooltip-host>
+              <div class="icon-fee" role="presentation">?</div>
+              <rl-simple-tooltip rl-typography="small">
+                <b translate>payment-status.wallet-rate-tooltip-1</b>
+                <p translate>payment-status.wallet-rate-tooltip-2</p>
+                <p translate>payment-status.wallet-rate-tooltip-3</p>
+              </rl-simple-tooltip>
+            </span>
+          </th>
+          <td rlTableCell rl-test="payment-status-rate">{{ paymentRate | currency:paymentCurrency:'symbol':'1.2' }}</td>
+        </tr>
+        <tr rlTableRow="primary">
+          <th [class]="bem('th')" rlTableHeader translate>payment-status.net-header</th>
+          <td rlTableCell rl-test="payment-status-net">
+            <rl-typography [bold]="true" color="happy" size="large">{{ paymentNet | currency:paymentCurrency:'symbol':'1.2' }}</rl-typography>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div rl-modal-body-part="actionsContainer">
+      <button
+        class="btn btn-primary"
+        (click)="closeClicked.emit()"
+        rl-modal-body-part="primaryAction"
+        rl-test="payment-status-cta"
+      >{{ primaryCTA }}</button>
+      @if (canGoBackToInterview) {
+        <custom-button
+          btnClass="btn btn-secondary"
+          (onClick)="editClicked.emit()"
+          rl-modal-body-part="secondaryAction"
+          rl-test="payment-status-cta-edit"
+        >{{ 'payment-status.cta-edit' | translate }}</custom-button>
+      }
+      @if (canDeletePaymentAgreement && !canGoBackToInterview) {
+        <custom-button
+          btnClass="btn btn-secondary"
+          (onClick)="deleteClicked.emit()"
+          [isLoading]="loading"
+          rl-modal-body-part="secondaryAction"
+          rl-test="payment-status-delete-payment-agreement"
+        >{{ 'payment-status.delete-payment-agreement' | translate }}</custom-button>
+      }
+      @if (canAskForRefund) {
+        <custom-button
+          btnClass="btn btn-secondary"
+          (onClick)="askForRefundClicked.emit()"
+          [isLoading]="loading"
+          rl-modal-body-part="secondaryAction"
+          rl-test="payment-status-ask-refund"
+        >{{ 'payment-status.cta-start-refund' | translate }}</custom-button>
+      }
+    </div>
+  </rl-modal-body>
+</rl-modal>

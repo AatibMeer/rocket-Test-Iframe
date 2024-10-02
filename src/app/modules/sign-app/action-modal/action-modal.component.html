@@ -1,0 +1,184 @@
+<rl-modal [class]="bem(undefined)" fakePath="actionModal" rl-test="action-modal">
+  @if (userIsViewer) {
+    <rl-modal-header>
+      <h1 rl-modal-title rl-typography="heading" translate>action-modal_review-document</h1>
+      <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header>
+  } @else {
+    <rl-modal-header-branded [product]="mainCta?.headerTitle ? undefined : mainCta?.product">
+      <h1 rl-modal-title rl-typography="heading">
+        {{mainCta?.headerTitle || 'action-modal_heading' | translate}}
+      </h1>
+      <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded>
+  }
+  <rl-modal-body [class]="bem('body')">
+    <!-- modal context section. If the action has text it goes here -->
+    <rl-copy-document-actions-container #copyDocumentContainer
+      [binder]="binder"
+      [ownerUser]="userIsOwner"
+      [payoutEnabled]="payoutEnabled"
+      [userIsPayee]="userIsPayee"
+      [payeeAccountAttached]="payeeAccountAttached"
+      [payeeAccountVerificationFailed]="payeeAccountVerificationFailed"
+      [customActionsModal]="brandConfig?.customActionsModalForDocumentCopyFeature"
+      [signerDataComplete]="!signerDataIsMissing"
+      [binderHasInputs]="binderHasInputs"
+      [actions]="allActions">
+    </rl-copy-document-actions-container>
+
+    @if ((mainCtaHeader || contextualMessage) &&
+      !copyDocumentContainer.hasEnabledLayoutForCompletedDocuments() &&
+      !copyDocumentContainer.hasEnabledLayoutForCopiedDocuments()) {
+      <div [class]="bem('context')"
+        rl-modal-body-part="heroText"
+        [ngClass]="{'no-margin-bottom': docOwnerSignedDocAndOtherSignersPending || signerSignedAndOtherSignersPending || signerOrOwnerSigningCompleted}"
+        rl-modal-description
+        >
+        <div rl-modal-body-part="container">
+          @if (mainCtaHeader) {
+            @if (mainCtaHeader.image) {
+              <div><img class="sign-icon" [src]="mainCtaHeader.image"></div>
+            }
+            @if (mainCtaHeader.useDefaultIcon) {
+              <div>
+                @if (brandingLevel == 1) {
+                  <img class="sign-icon modal-default-icon-color" src="images/rocketsign-logo.svg">
+                }
+                @if (brandingLevel != 1) {
+                  <span class="default-icon sign-icon rl-icon swivel-icon modal-default-icon-color"></span>
+                }
+              </div>
+            }
+            @if (mainCtaHeader.title) {
+              <p class="bold-700" rl-modal-body-part="regularContent" rl-test="action-modal-primary-title" rl-typography="bold">{{ mainCtaHeader.title }}</p>
+            }
+            @if (mainCtaHeader.description) {
+              <p rl-modal-body-part="regularContent" rl-test="action-modal-primary-description">{{ mainCtaHeader.description }}</p>
+            }
+            @if (mainCtaHeader.secondDescription) {
+              <p rl-modal-body-part="regularContent" rl-test="action-modal-primary-description" rl-typography="bold">{{ mainCtaHeader.secondDescription }}</p>
+            }
+          }
+          @if (contextualMessage?.key) {
+            <div class="contextual-message">
+              <span class="title"><com [key]="'action-modal_doc-owner-message'" [params]="contextualMessage?.params"></com></span>
+              <div class="message-wrapper">
+                @if (!contextualMessage.isCustom) {
+                  <p #message class="message" [class.expanded]="textExpanded" [comContent]="contextualMessage.key" [params]="contextualMessage?.params"></p>
+                }
+                @if (contextualMessage.isCustom) {
+                  <p #message class="message" [class.expanded]="textExpanded">{{contextualMessage.key}}</p>
+                }
+                @if (canToggleText) {
+                  <div class="see-more-wrapper">
+                    @if (!textExpanded) {
+                      <span>...</span>
+                    }
+                    <span class="see-more" (click)="toggleText()">{{textExpanded ? ('action-modal_see-less' | translate ) : ('action-modal_see-more' | translate )}}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- primary CTA -->
+    @if (mainCta?.url) {
+      <a [href]="mainCta.url" rel="noopener" [attr.target]="mainCta.openInNewWindow ? '_blank' : null">
+        <ng-container *ngTemplateOutlet="primaryCTA"></ng-container>
+      </a>
+    } @else {
+      @if (!copyDocumentContainer.hasEnabledLayoutForCopiedDocuments()) {
+        <button
+          class="btn btn-primary {{mainCta?.wrapperClass}} {{bem('cta', {deviant: !!secondaryCta})}}"
+          (click)="elemClicked($event, mainCta)"
+          [rl-test]="mainCta?.id | lowercase"
+          [rl-modal-body-part]="signerDataIsMissing || docOwnerSignedDocAndOtherSignersPending || mainCtaHeader || mainCta?.id === 'GET_VERIFIED' ? 'regularContent' : 'heroText'"
+          >
+          {{ mainCta?.heading ? (mainCta?.heading | translate) : mainCta?.name }}
+        </button>
+      }
+    }
+    <ng-template #primaryCTA>
+      @if (!copyDocumentContainer.hasEnabledLayoutForCopiedDocuments()) {
+        <button
+          class="btn btn-primary {{mainCta?.wrapperClass}} {{bem('cta', {deviant: !!secondaryCta})}}"
+          (click)="elemClicked($event, mainCta)"
+          [rl-test]="mainCta?.id | lowercase"
+          [rl-modal-body-part]="signerDataIsMissing || docOwnerSignedDocAndOtherSignersPending || mainCtaHeader || mainCta?.id === 'GET_VERIFIED' ? 'regularContent' : 'heroText'"
+          >
+          {{ mainCta?.heading ? (mainCta?.heading | translate) : mainCta?.name }}
+        </button>
+      }
+    </ng-template>
+
+    @if (secondaryCta && !copyDocumentContainer.hasEnabledLayoutForCopiedDocuments()) {
+      @if (secondaryCta?.url) {
+        <a [href]="secondaryCta.url" rel="noopener" [attr.target]="secondaryCta.openInNewWindow ? '_blank' : null">
+          <ng-container *ngTemplateOutlet="secondaryCTA"></ng-container>
+        </a>
+      } @else {
+        <button
+          class="btn btn-secondary {{ secondaryCta?.wrapperClass }} {{bem('cta')}}"
+          (click)="elemClicked($event, secondaryCta)"
+          [rl-test]="secondaryCta?.id | lowercase"
+          >
+          {{ secondaryCta?.heading ? (secondaryCta?.heading | translate) : secondaryCta?.name }}
+        </button>
+      }
+      <ng-template #secondaryCTA>
+        <button
+          class="btn btn-secondary {{ secondaryCta?.wrapperClass }} {{bem('cta')}}"
+          (click)="elemClicked($event, secondaryCta)"
+          [rl-test]="secondaryCta?.id | lowercase"
+          >
+          {{ secondaryCta?.heading ? (secondaryCta?.heading | translate) : secondaryCta?.name }}
+        </button>
+      </ng-template>
+    }
+
+    <!-- action list -->
+    <div [class]="bem('action-list-container')">
+      <ul [class]="bem('action-list')" #actionList rl-test="action-modal-other-actions-list" rl-typography="body">
+        @for (action of actions; track action; let i = $index) {
+          <li
+            #actionItems
+            class="{{bem('listed-action', {hidden: !showOtherActions && i > 0, solo: !showOtherActions && i === 0})}} {{action?.wrapperClass}}"
+            (click)="elemClicked($event, action)"
+            [rl-test]="action.id | lowercase"
+            >
+            @if (action.url) {
+              <a
+                [class]="bem('listed-action-anchor')"
+                [href]="action.url"
+                rel="noopener"
+                [attr.target]="action.openInNewWindow ? '_blank' : null"
+                >
+                <ng-container *ngTemplateOutlet="listedAction"></ng-container>
+              </a>
+            } @else {
+              <i class="rl-icon {{action.iconClassName}} {{bem('listed-action-icon')}}" role="presentation"></i>
+              <span [class]="bem('listed-action-text')">{{ action?.heading ? (action?.heading | translate) : action?.name }}</span>
+            }
+            <ng-template #listedAction>
+              <i class="rl-icon {{action.iconClassName}} {{bem('listed-action-icon')}}" role="presentation"></i>
+              <span [class]="bem('listed-action-text')">{{ action?.heading ? (action?.heading | translate) : action?.name }}</span>
+            </ng-template>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- action list toggle -->
+    @if (actions?.length > 1) {
+      <button [class]="bem('toggle-options')" (click)="toggleOtherActions()" [attr.data-expanded]="showOtherActions ? 'expanded' : 'collapsed'" rl-test="action-modal-other-actions-toggle" rl-typography="small" [bold]="true">
+        <i class="rl-icon {{ showOtherActions ? 'arrow' : 'arrow-down' }} {{bem('toggle-icon')}}" role="presentation"></i>
+        {{ (showOtherActions ? 'action-modal_less-options' : 'action-modal_other-options') | translate }}
+      </button>
+    }
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

@@ -1,0 +1,35 @@
+<rl-modal fakePath="payment/createAgreement/yourRole" rl-test="payment-select-role">
+    <rl-modal-header-branded product="wallet">
+        <h1 rl-modal-title rl-typography="heading">
+            <i class="rl-icon card" role="presentation"></i>
+            {{ 'payment-select-role.heading' | translate }}
+        </h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded> 
+    <rl-modal-body>
+        <p [class]="bem('hero')" rl-modal-body-part="heroText" rl-modal-description class="bold-700" translate>
+            payment-select-role.primary-text</p>
+        <div [class]="bem('roleContainer')">
+            <label [class]="bem('inputContainer')">
+                <rl-input #payeeRole id="payeeRole" rl-test="payment-select-payee-role" type="radio" [class]="bem('radio')"
+                (change)="handleChange($event)" radioVariant="secondary" [checked]="selectedOption === 'payeeRole'"> </rl-input>
+                <p> {{ 'payment-select-role.payee-role' | translate }} </p>
+            </label>
+            <label [class]="bem('inputContainer')">
+                <rl-input #payerRole id="payerRole" rl-test="payment-select-payer-role" type="radio" [class]="bem('radio')"
+                (change)="handleChange($event)" radioVariant="secondary" [checked]="selectedOption === 'payerRole'" > </rl-input>
+                <p> {{ 'payment-select-role.payer-role' | translate }} </p>
+            </label>
+            <label [class]="bem('inputContainer')">
+                <rl-input #otherRole id="otherRole" rl-test="payment-select-other-role" type="radio"  [class]="bem('radio')"
+                (change)="handleChange($event)" radioVariant="secondary" [checked]="selectedOption === 'otherRole'"> </rl-input>
+                <p> {{ 'payment-select-role.other-role' | translate }} </p>
+            </label>
+        </div>
+            <div rl-modal-body-part="actionsContainer">
+                <custom-button btnClass="btn btn-primary" (onClick)="next()" [isDisabled]="!selectedOption"
+                rl-modal-body-part="primaryAction" rl-test="payment-select-role-next">
+                {{ 'payment-select-role.next' | translate }}</custom-button>
+            </div>
+    </rl-modal-body>
+</rl-modal>

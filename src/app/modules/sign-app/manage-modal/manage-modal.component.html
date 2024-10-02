@@ -1,0 +1,73 @@
+<rl-modal fakePath="manage" rl-test="manage-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon profile" role="presentation"></i>
+      <span translate>Manage-modal_manage-signers-heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <p class="bold-700" rl-modal-body-part="heroText" rl-typography="bold"><com [key]="'Manage-modal_manage-signers-subheading'"></com></p>
+      <div class="parties-container">
+        @for (party of parties; track party) {
+          <div [ngClass]="getColorClass(party)" [style.border]="getPartyBorder(party)" class="party">
+            <div class="party-container">
+              <div class="details">
+                <div class="party-email">
+                  <span>{{party.email}}</span>
+                </div>
+                <div class="party-status">
+                  @if (party.status == 'DECLINED') {
+                    <span class="declined"><span class="rl-icon red-cancel"></span><com [key]="'Manage-modal_manage-signers-status-declined'"></com></span>
+                  }
+                  @if (party.status == 'INVITED') {
+                    <span class="waiting"><span class="rl-icon clock2"></span><com [key]="'Manage-modal_manage-signers-status-waiting'"></com></span>
+                  }
+                  @if (!party.roles.includes('VIEWER') && party.status == 'VIEWED') {
+                    <span class="waiting"><span class="rl-icon eye"></span><com [key]="'Manage-modal_manage-signers-status-viewed'"></com></span>
+                  }
+                  @if (party.status == 'SIGNED' && ((party.roles.includes('PAYEE') && !paymentAgreement.identityVerified) || (party.roles.includes('PAYER') && !paymentAgreement.paid))) {
+                    <span class="waiting"><span class="rl-icon signed"></span><com [key]="'Manage-modal_manage-signers-status-signed'"></com></span>
+                  }
+                  @if (party.roles.includes('PAYEE') && paymentAgreement.identityVerified) {
+                    <span class="waiting"><span class="rl-icon verified-icon"></span><com [key]="'Manage-modal_manage-signers-status-verified'"></com></span>
+                  }
+                  @if (party.roles.includes('VIEWER') && party.status == 'VIEWED') {
+                    <span class="ready 1"><span class="rl-icon eye"></span><com [key]="'Manage-modal_manage-signers-status-viewed'"></com></span>
+                  }
+                  @if (party.status == 'SIGNED' && !party.roles.includes('PAYER') && !party.roles.includes('PAYEE')) {
+                    <span class="ready 2"><span class="rl-icon signed"></span><com [key]="'Manage-modal_manage-signers-status-signed'"></com></span>
+                  }
+                  @if (paymentAgreement.paid && party.roles.includes('PAYER')) {
+                    <span class="ready 3"><span class="rl-icon card"></span><com [key]="'Manage-modal_manage-signers-status-paid'"></com></span>
+                  }
+                  @if (paymentAgreement.collected && party.roles.includes('PAYEE')) {
+                    <span class="ready 4"><span class="rl-icon card"></span><com [key]="'Manage-modal_manage-signers-status-collected'"></com></span>
+                  }
+                </div>
+              </div>
+              <div class="party-buttons">
+                <div class="reminder-btn" [class.disabled]="isReminderDisabled(party)" (click)="sendReminder(party)">
+                  <com [key]="'Manage-modal_manage-signers-send-reminder'"></com>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        <section class="tip">
+          <com key="Manage-modal_manage-signers-tip"></com>
+        </section>
+      </div>
+      <div class="start-over">
+        <button (click)="close()" class="btn btn-primary">
+          <com [key]="'Manage-modal_manage-signers-done'"></com>
+        </button>
+        <button [disabled]="signingFinished" (click)="cancelBtnClick()" type="button" class="btn btn-secondary">
+          <com [key]="'Manage-modal_manage-signers-cancel-invites'"></com>
+        </button>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

@@ -1,0 +1,29 @@
+<ckeditor #ckeditor
+  [(ngModel)]="editorHtml"
+  [config]="documentEditorSettings.config"
+  (ready)="onEditorReady()"
+  (change)="onChange()">
+</ckeditor>
+
+<div class="banner-placeholder">
+  <div class="document-editor progress-banner">
+    <div class="button-wrapper-bottom">
+      <div class="inner-wrapper">
+        <button
+          type="button"
+          class="btn btn-secondary right-aligned"
+          (click)="cancelEdits()"
+          [comContent]="'document-editor_cancel'">
+        </button>
+        <custom-button
+          (onClick)="updateDocumentContent()"
+          [btnType]="'button'"
+          [btnClass]="'btn btn-primary right-aligned'"
+          [defaultTranslation]="{key: 'document-editor_continue'}"
+          [loadingTranslation]="{key: 'document-editor_saving'}"
+          [isLoading]="requestInFlight">
+        </custom-button>
+      </div>
+    </div>
+  </div>
+</div>

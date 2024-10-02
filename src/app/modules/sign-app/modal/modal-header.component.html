@@ -1,0 +1,9 @@
+<div [class]="bem()" rl-typography="heading" rl-test="modal-header">
+    <div [class]="bem('left-widget')" (click)="leftWidgetClick()" [hidden]="!this.showWidgets" rl-test="modal-header-left-widget">
+        <ng-content select="[rl-modal-header-widget=left]"></ng-content>
+    </div>
+    <ng-content></ng-content>
+    <div [class]="bem('right-widget')" (click)="rightWidgetClick()" [hidden]="!this.showWidgets" rl-test="modal-header-right-widget">
+        <ng-content select="[rl-modal-header-widget=right]"></ng-content>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+@if (input.type != 'CUSTOM_TEXT') {
+  <signature-input #inputEl
+    [input]="input"
+    [requestedDateFormat]="requestedDateFormat"
+    [highlight]="highlight"
+    [simulationStyles]="simulationStyles"
+    [styles]="boxStyles"
+    [font]="fontStyles"
+    [highlightedInputClicks]="highlightedInputClicks"
+    [datepickerLanguage]="datepickerLanguage"
+    (valueChange)="editInput(input, $event)"
+    (click)="editInput(input)"
+    [redOutline]="redOutline">
+  </signature-input>
+}
+@if (input.type == 'CUSTOM_TEXT') {
+  <custom-text-input #inputEl
+    [input]="input"
+    [styles]="boxStyles"
+    [font]="fontStyles"
+    [dynamicFontSize]="getDynamicFontSize()"
+    [highlight]="highlight"
+    [highlightedInputClicks]="highlightedInputClicks"
+    (click)="editInput(input)"
+    [redOutline]="redOutline">
+  </custom-text-input>
+}

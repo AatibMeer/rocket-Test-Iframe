@@ -1,0 +1,28 @@
+<rl-modal fakePath="payment/deleteAgreement" rl-test="remove-payment-modal">
+    <rl-modal-header-branded product="wallet">
+        <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+        <h1 rl-modal-title rl-typography="heading">
+            {{ 'remove-payment-modal.heading' | translate }}
+        </h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded>
+    <rl-modal-body>
+        <p rl-modal-description rl-modal-body-part="heroText" rl-test="remove-payment-modal-hero" class="bold-700" translate>remove-payment-modal.hero</p>
+        <p rl-modal-body-part="regularContent" rl-test="remove-payment-modal-description" translate>remove-payment-modal.description</p>
+        <div rl-modal-body-part="actionsContainer">
+            <custom-button
+                    btnClass="btn btn-primary"
+                    (onClick)="removePaymentAgreement()"
+                    [isLoading]="loading"
+                    rl-modal-body-part="primaryAction"
+                    rl-test="remove-payment-delete-payment-agreement"
+            >{{ 'remove-payment-modal.remove' | translate }}</custom-button>
+            <custom-button
+                    btnClass="btn btn-secondary"
+                    (onClick)="back()"
+                    rl-modal-body-part="secondaryAction"
+                    rl-test="remove-payment-go-back"
+            >{{ 'remove-payment-modal.go-back' | translate }}</custom-button>
+        </div>
+    </rl-modal-body>
+</rl-modal>

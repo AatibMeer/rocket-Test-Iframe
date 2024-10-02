@@ -1,0 +1,98 @@
+<rl-modal>
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon signature2" role="presentation"></i>
+      <span translate>signature-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-wrapper">
+      <div class="modal-content-wrapper">
+        <div class="signature-type-switch">
+          <div class="switch-button signature-switch" [class.active]="activeSigType == 'draw'" (click)="switchSigType('draw')">
+            <com [key]="'signature-modal_select_draw_signature'"></com>
+          </div><div class="switch-button signature-switch" [class.active]="activeSigType == 'type'" (click)="switchSigType('type')">
+          <com class="e2e_type-tab" [key]="'signature-modal_select_type_in_signature'"></com>
+        </div>
+      </div>
+      <div [class.hidden]="activeSigType == 'draw'" class="modal-content">
+        <label><com [key]="'signature-modal_prompt'"></com></label>
+        <form #editSigForm="ngForm" (submit)="confirmSignatureEditsAndTos()">
+          <div class="form-group">
+            <input id="signature-input"
+              #editableInput
+              class="party-form-control"
+              required
+              type="text"
+              [style.color]="typeInSignatureColor"
+              [ngClass]="signatureStyle"
+              name="signature-input"
+              [(ngModel)]="signatureValue">
+            <div class="char-counter">
+              <div class="counter-text" [ngClass]="{'over-limit': signatureValue?.length > 75}">
+                <span>{{signatureValue?.length}}/75</span>
+              </div>
+            </div>
+            <div class="control-wrapper">
+              <div (click)="switchColor()" class="switch-button switch-color">
+                <span class="rl-icon color-change"></span>
+                <com class="e2e_switch-color" [key]="'signature-modal_switch_color'"></com>
+              </div><div (click)="switchFont()" class="switch-button switch-font-button">
+              <span class="rl-icon font-change"></span>
+              <com [key]="'signature-modal_switch_font'"></com>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-buttons">
+          <button [class.disabled]="!isSigValid()" [disabled]="!isSigValid()" type="submit" class="btn btn-primary"><com [key]="'signature-modal_confirm'"></com></button>
+        </div>
+        @if (!isOwner()) {
+          <p class="terms-link"
+            comLinkNewTab
+            [comContent]="'signature-modal_terms-and-conditions-with-url'"
+            [params]="{termsUrl: termsUrl, privacyPageUrl: privacyPageUrl}">
+          </p>
+        }
+      </form>
+    </div>
+    @if (activeSigType == 'draw') {
+      <div class="modal-content">
+        <label><com [key]="'signature-modal_prompt_draw'"></com></label>
+        <form #drawSigForm="ngForm" (submit)="saveDrawSign()">
+          <div class="form-group">
+            <!--
+            Due to limitations with signature pad implementation,
+            the `#parentPadContainer` ID is used within `signature-pad-wrapper.component.ts.
+            -->
+            <div id="parentPadContainer" class="signature-pad-container">
+              <signature-pad [svgData]="unsavedSvgData" #signaturePad></signature-pad>
+            </div>
+            <div class="control-wrapper">
+              <div (click)="switchColor()" class="switch-button switch-color">
+                <span class="rl-icon color-change"></span>
+                <com class="e2e_switch-color" [key]="'signature-modal_switch_color'"></com>
+              </div><div (click)="clearPad()" class="switch-button switch-font-button">
+              <span class="rl-icon start-again"></span>
+              <com class="e2e_start-again" [key]="'signature-modal_start_again'"></com>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-buttons">
+          <button [class.disabled]="isPadEmpty(signaturePad)" [disabled]="isPadEmpty(signaturePad)" type="submit" class="btn btn-primary"><com [key]="'signature-modal_confirm'"></com></button>
+        </div>
+        @if (!isOwner()) {
+          <p class="terms-link"
+            comLinkNewTab
+            [comContent]="'signature-modal_terms-and-conditions-with-url'"
+            [params]="{termsUrl: termsUrl, privacyPageUrl: privacyPageUrl}">
+          </p>
+        }
+      </form>
+    </div>
+  }
+</div>
+</div>
+</rl-modal-body>
+<rl-modal-footer></rl-modal-footer>
+</rl-modal>

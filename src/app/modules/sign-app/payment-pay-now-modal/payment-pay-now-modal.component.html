@@ -1,0 +1,46 @@
+<rl-modal [className]="rootClassnames" fakePath="payment/payByCard" rl-test="payment-enter-method-details">
+  <rl-modal-header-branded product="wallet">
+    @if (isPaymentMethodModalEnabled()) {
+      <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    }
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="rl-icon card" role="presentation"></i>
+      {{ 'payment-pay-now-modal_payment-pay-now' | translate }}
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div rl-modal-body-part="heroText">
+      <div rl-modal-body-part="container">
+        @if (cardIconUrl) {
+          <img class="sign-icon" rl-test="card-icon" [src]="cardIconUrl">
+        }
+        <p [class]="bem('description')"
+          rl-modal-body-part="regularContent"
+          rl-modal-description
+          class="bold-700"
+        translate>payment-pay-now-modal_payment-pay-now-heading</p>
+        <p [class]="bem('review')"
+          rl-modal-body-part="regularContent"
+        translate>payment-pay-now-modal_you-can-review</p>
+      </div>
+    </div>
+    <form rl-modal-body-part="container" (ngSubmit)="validateCard()">
+      <!-- rl-spreedly-card-form is a Web Component -->
+      <rl-spreedly-card-form #spreedlyCardForm
+        [email]="userEmail"
+        [spreedlyEnvironmentKey]="spreedlyEnvKey"
+      ></rl-spreedly-card-form>
+      <perimeter-x [styles]="globalBrandingStyles">{{ 'payment-pay-now-modal_human-challenge' | translate }}</perimeter-x>
+      <rl-secure-info-message [class]="bem('info-secure')"></rl-secure-info-message>
+      <div rl-modal-body-part="actionsContainer">
+        <custom-button btnClass="btn btn-primary"
+          btnType="submit"
+          data-test="continueButton"
+          [isLoading]="cardIsProcessing"
+          [defaultTranslation]="{key: 'payment-pay-now-modal_continue'}"
+        rl-modal-body-part="primaryAction"></custom-button>
+      </div>
+    </form>
+  </rl-modal-body>
+</rl-modal>

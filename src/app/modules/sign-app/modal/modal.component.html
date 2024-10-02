@@ -1,0 +1,10 @@
+ <rl-lightbox [visible]="true">
+    <div [attr.aria-modal]="true"
+         [attr.aria-labelledby]="labelledBy"
+         [attr.aria-describedby]="describedBy"
+         [class]="rootClassnames"
+         rl-test="modal"
+         role="dialog">
+        <ng-content></ng-content>
+    </div>
+</rl-lightbox>

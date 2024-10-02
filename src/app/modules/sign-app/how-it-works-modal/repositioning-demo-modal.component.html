@@ -1,0 +1,37 @@
+<rl-modal rl-test="repositioning-demo-modal">
+    <rl-modal-header-branded product="sign">
+        <h1 rl-modal-title rl-typography="heading" translate>repositioning-demo-modal_header</h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded>
+    <rl-modal-body>
+        <div class="modal-wrapper" (click)="$event.stopPropagation()">
+            <div class="modal-content-wrapper">
+                <div class="modal-content repositioning-modal-content">
+                    <div class="instruction-image-small">
+                        <img class="demo-image" src="images/howitworks/how-it-works-repositioning-small.png">
+                    </div>
+                    <div class="instruction-image-medium">
+                        <img class="demo-image" src="images/howitworks/how-it-works-repositioning-medium.png">
+                    </div>
+                    <div class="instruction-image-large">
+                        <img class="demo-image" src="images/howitworks/how-it-works-repositioning-large.png">
+                    </div>
+                    <p class="instruction-text-small">
+                        <com class="with-bottom-margin" [key]="'repositioning-demo-modal_instruction-heading-small-screens'"></com>
+                        <com class="normal-font-weight" [key]="'repositioning-demo-modal_instruction-content'"></com>
+                    </p>
+                    <p class="instruction-text-medium-large">
+                        <com class="with-bottom-margin" [key]="'repositioning-demo-modal_instruction-heading-large-screens'"></com>
+                        <com class="normal-font-weight" [key]="'repositioning-demo-modal_instruction-content'"></com>
+                    </p>
+                    <div class="btn-group bottom-buttons">
+                        <button (click)="close()" class="btn btn-primary">
+                            <com [key]="'repositioning-demo-modal_close-btn'"></com>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </rl-modal-body>
+    <rl-modal-footer></rl-modal-footer>
+</rl-modal>

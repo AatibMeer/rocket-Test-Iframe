@@ -1,0 +1,115 @@
+<rl-modal fakePath="addSignerData" rl-test="missing-signer-info">
+  <rl-modal-header-branded product="sign">
+    @if (signatureBuilderModeEnabled && !forceUserToAddData) {
+      <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    }
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon addsigner" role="presentation"></i>
+      <span translate>add-signer-data-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-content">
+      <form #form="ngForm" [ngFormOptions]="{updateOn: 'submit'}" (ngSubmit)="onSubmit(form)">
+        <div class="content-container">
+          @if (brandingLevel == 1) {
+            <img class="sign-icon modal-default-icon-color" src="images/rocketsign-logo.svg">
+          }
+          @if (brandingLevel != 1) {
+            <span class="default-icon sign-icon rl-icon swivel-icon modal-default-icon-color"></span>
+          }
+          @if (introToUse == 'standard') {
+            <p class="subheading"><com [key]="'add-signer-data-modal_subheading'"></com></p>
+            <p class="description">
+              <com [key]="'add-signer-data-modal_description'"></com>
+              <span (click)="showTooltip = !showTooltip" class="tooltip-text">
+                <com [key]="'add-signer-data-modal_more-info'"></com>
+                <tooltip [show]="showTooltip" (close)="showTooltip = false" [content]="tooltipContent"></tooltip>
+              </span>
+            </p>
+          }
+          @if (introToUse == 'signatureBuilder') {
+            <p class="subheading"><com [key]="'add-signer-data-modal_subheading-builder-mode'"></com></p>
+            <p class="description"><com [key]="'add-signer-data-modal_description-builder-mode'"></com></p>
+          }
+          @if (introToUse == 'addAnotherSigner') {
+            <p class="subheading add-signer-subheading"><com [key]="'add-signer-data-modal_subheading-add-signer'"></com></p>
+            <p class="description add-signer-description"><com [key]="'add-signer-data-modal_description-add-signer'"></com></p>
+          }
+          @for (party of partiesWithSignatureInputs; track trackByPartyReference(idx, party); let idx = $index) {
+            <div class="form-group this-is-me-wrapper">
+              <span [ngStyle]="{'color': party.metaData?.style?.background}" class="role-label">
+                <com [key]="'add-signer-data-modal_signer'" [params]="{index: idx + 1}"></com>
+              </span>
+              <input type="checkbox"
+                [attr.readonly]="owner.email == party?.email"
+                id="this_is_me_{{idx}}"
+                name="this-is-me"
+                [checked]="owner.email == party?.email"
+                (click)="toggleOwner(party)">
+              <label [class.hidden]="shouldHideOption(party)" rl-test="this-is-me-checkbox" class="this-is-me" for="this_is_me_{{idx}}">
+                <span class="rl-icon checkbox-check doc-man-checkbox"></span>
+                <com [key]="'add-signer-data-modal_this-is-me'"></com>
+              </label>
+            </div>
+            <div class="party-details" [ngStyle]="{'border-color': party.metaData?.style?.background}">
+              <div class="form-group">
+                <label for="name-{{idx}}"><com [key]="'add-signer-data-modal_name'"></com></label>
+                <input
+                  required
+                  class="party-form-control"
+                  rl-test="name-field"
+                  [class.disabled]="party.roles.includes('OWNER')"
+                  id="name-{{idx}}"
+                  name="name-{{idx}}"
+                  type="text"
+                  [(ngModel)]="party.legalName">
+                <span class="rl-icon dispute"></span>
+              </div>
+              <div class="form-group">
+                <label for="email-{{idx}}"><com [key]="'add-signer-data-modal_email-address'"></com></label>
+                <input
+                  uniqueValidator
+                  unique="email-{{idx}}"
+                  controlNamePrefix="email"
+                  required
+                  rl-test="email-field"
+                  class="party-form-control"
+                  [class.disabled]="party.roles.includes('OWNER')"
+                  id="email-{{idx}}"
+                  type="email"
+                  name="email-{{idx}}"
+                  (keyup)="onEmailChange($event, party, form)"
+                  emailValidator
+                  [(ngModel)]="party.email">
+                <span class="rl-icon dispute"></span>
+              </div>
+            </div>
+          }
+          @if (form.invalid && form.touched && formHasEmptyOrNotUniqueField(form)) {
+            <div rl-test="error-empty-or-duplicate" class="error">
+              <span><com key="add-signer-data-modal_error-empty-or-unique"></com></span>
+            </div>
+          }
+          @if (form.invalid && form.touched && formHasInvalidEmail(form)) {
+            <div rl-test="error-invalid-email" class="error">
+              <span><com key="add-signer-data-modal_error-email-format"></com></span>
+            </div>
+          }
+        </div>
+        <div class="bottom-buttons">
+          <custom-button
+            rl-test="signer-data-cta"
+            [btnType]="'submit'"
+            [btnClass]="'btn btn-primary'"
+            [defaultTranslation]="{key: 'add-signer-data-modal_save'}"
+            [loadingTranslation]="{key: 'add-signer-data-modal_saving'}"
+            [isLoading]="actionInProgress">
+          </custom-button>
+        </div>
+      </form>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

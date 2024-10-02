@@ -1,0 +1,11 @@
+<div [class]="rootClassnames">
+    <label [class]="labelClassnames" [htmlFor]="id" rl-typography="bold">
+        <ng-content select="[data-label]"></ng-content>
+    </label>
+    <div [class]="controlClassnames">
+        <ng-content select="[data-control]"></ng-content>
+    </div>
+    <div [class]="messagesClassnames" [id]="messagesID" rl-typography aria-live="polite">
+        <ng-content select="[data-messages]"></ng-content>
+    </div>
+</div>

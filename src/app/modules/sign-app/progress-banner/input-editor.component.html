@@ -1,0 +1,44 @@
+<div class="progress-banner">
+  @if (this.inputs.length != 0) {
+    <div class="content-wrapper input-editor">
+      <span class="padded-text">
+        <span><com [key]="'progress-banner_box-counter'" [params]="getStepNumber()"></com></span>
+      </span>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar" [class.complete]="getProgressPercent() == '100%'" [ngStyle]="{width: getProgressPercent()}"></div>
+      </div>
+    </div>
+  }
+  <div class="button-wrapper-bottom">
+    <div class="inner-wrapper input-updates-wrapper">
+      @if (this.indexOfCurrentInput == 0) {
+        <button
+          type="button" class="btn btn-secondary prev-btn e2e_back-to-edit"
+          (click)="backToEdit()"
+          [comContent]="'progress-banner_back-to-edit'">
+        </button>
+      }
+      @if (this.indexOfCurrentInput > 0) {
+        <button
+          type="button" class="btn btn-secondary prev-btn"
+          (click)="selectPreviousInput()"
+          [comContent]="'progress-banner_previous-box'">
+        </button>
+      }
+      @if (this.indexOfCurrentInput < inputs.length - 1) {
+        <button
+          type="button" class="btn btn-primary next-btn"
+          (click)="selectNextInput()"
+          [comContent]="'progress-banner_confirm-box'">
+        </button>
+      }
+      @if (this.indexOfCurrentInput == inputs.length - 1 || this.inputs.length == 0) {
+        <button
+          (click)="saveChanges()"
+          class="btn btn-primary finish-btn"
+          [comContent]="'progress-banner_done'">
+        </button>
+      }
+    </div>
+  </div>
+</div>

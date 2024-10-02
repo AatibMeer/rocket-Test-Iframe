@@ -1,0 +1,50 @@
+<rl-modal class="rl-payment-kyc-verify-result" fakePath="kyc/result" rl-test="kyc-result">
+  <rl-modal-header-branded product="wallet">
+    @if (status==='unverified') {
+      <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    }
+    <h1 rl-modal-title rl-typography="heading" translate>payment-kyc-verify-result.header</h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <p rl-modal-body-part="heroText" rl-typography="bold" rl-modal-description rl-test="kyc-result-hero-text">
+      @if (status==='verified') {
+        <span translate>payment-kyc-verify-result.verified.hero</span>
+      }
+      @if (status==='unverified') {
+        <span translate>payment-kyc-verify-result.unverified.hero</span>
+      }
+      @if (status==='pending') {
+        <span translate>payment-kyc-verify-result.pending.hero</span>
+      }
+    </p>
+    @if (status==='verified') {
+      <p rl-modal-body-part="regularContent">
+        @if (entityType==='INDIVIDUAL') {
+          <span translate>payment-kyc-verify-result.verified.main-individual</span>
+        }
+        @if (entityType==='BUSINESS') {
+          <span translate [translateParams]="{companyName: companyName}">payment-kyc-verify-result.verified.main-individual</span>
+        }
+      </p>
+    }
+    @if (status==='unverified') {
+      <p rl-modal-body-part="regularContent" translate>payment-kyc-verify-result.unverified.main</p>
+    }
+    @if (status==='pending') {
+      <p rl-modal-body-part="regularContent" translate>payment-kyc-verify-result.pending.main</p>
+    }
+    <div rl-modal-body-part="actionsContainer">
+      @if (status==='verified') {
+        <button class="btn btn-primary" (click)="next()" rl-modal-body-part="primaryAction" translate>payment-kyc-verify-result.verified.cta</button>
+      }
+      @if (status==='unverified') {
+        <button class="btn btn-primary" (click)="next()" rl-modal-body-part="primaryAction" translate>payment-kyc-verify-result.unverified.nextCTA</button>
+        <button class="btn btn-secondary" (click)="back()" rl-modal-body-part="secondaryAction" translate>payment-kyc-verify-result.unverified.retryCTA</button>
+      }
+      @if (status==='pending') {
+        <button class="btn btn-primary" (click)="next()" rl-modal-body-part="primaryAction" translate>payment-kyc-verify-result.pending.cta</button>
+      }
+    </div>
+  </rl-modal-body>
+</rl-modal>

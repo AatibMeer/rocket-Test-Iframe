@@ -1,0 +1,104 @@
+<rl-modal fakePath="inviteViewers" rl-test="invite-viewers-modal">
+  <rl-modal-header-branded product="sign">
+    @if (binderHasViewers) {
+      <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    }
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon share" role="presentation"></i>
+      <span translate>invite-viewers-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <div class="content-container" [class.form-submitted]="actionAttempted">
+        <p class="walkthrough-text">
+          <com [key]="'invite-viewers-walkthrough'"></com>
+        </p>
+        <p class="walkthrough-text walkthrough-secondary">
+          <com [key]="'invite-viewers-walkthrough-more'"></com>
+        </p>
+        <form #form="ngForm" (submit)="sendInvitations();false;" [ngFormOptions]="{updateOn: 'submit'}">
+          <div class="form-group">
+            <label><com [key]="'invite-viewers-modal_send-to-name'"></com></label>
+            <input
+              rl-test="viewer-name"
+              name="viewer-name"
+              class="party-form-control"
+              [class.invalid-form-control]="!isNameValid()"
+              [(ngModel)]="viewerName">
+            @if (!isNameValid()) {
+              <div class="validation-error" rl-test="error-message">
+                <com [key]="'invite-viewers-modal_invalid-name'"></com>
+              </div>
+            }
+          </div>
+          <div class="form-group">
+            <label><com [key]="'invite-viewers-modal_send-to-email'"></com></label>
+            <input
+              rl-test="viewer-email"
+              name="viewer-email"
+              class="party-form-control"
+              trim="blur"
+              [class.invalid-form-control]="actionAttempted && (!isEmailValid() || isViewerOwner() || isViewerSigner() || isViewerAlreadyInvited())"
+              [(ngModel)]="viewerEmail">
+            @if (actionAttempted) {
+              @if (!isEmailValid() && !isViewerOwner()) {
+                <div rl-test="error-message" class="validation-error">
+                  <com [key]="'invite-viewers-modal_invalid-email'"></com>
+                </div>
+              }
+              @if (isViewerSigner()) {
+                <div rl-test="error-message" class="validation-error">
+                  <com [key]="'invite-viewers-modal_viewer-signer'"></com>
+                </div>
+              }
+              @if (isViewerAlreadyInvited()) {
+                <div rl-test="error-message" class="validation-error">
+                  <com [key]="'invite-viewers-modal_viewer-invited'"></com>
+                </div>
+              }
+              @if (isViewerOwner()) {
+                <div rl-test="error-message" class="validation-error">
+                  <com [key]="'invite-viewers-modal_invalid-email-owner'"></com>
+                </div>
+              }
+            }
+          </div>
+          <div class="custom-message">
+            <label><com [key]="'invite-viewers-modal_add-message'"></com></label>
+            <div>
+              <textarea
+                rl-test="viewer-message"
+                [class.invalid]="!isMessageValid()"
+                [(ngModel)]="customMessage"
+                (keyup)="updateCounter($event)"
+                [placeholder]="'invite-viewers-modal_placeholder-message' | translate"
+                name="custom-message" cols="20" rows="10">
+              </textarea>
+              @if (!isMessageValid()) {
+                <span class="rl-icon dispute"></span>
+              }
+              <div class="char-counter" [ngClass]="{'over-limit': !isMessageValid()}">
+                <span>{{customMessageLength}}/600</span>
+              </div>
+            </div>
+            <div rl-test="error-message" [ngClass]="{'over-limit': !isMessageValid()}" class="text-length-error">
+              <com [key]="'invite-viewers-modal_text-to-long'"></com>
+            </div>
+          </div>
+          <div class="bottom-buttons">
+            <custom-button
+              [btnType]="'submit'"
+              [btnClass]="'btn btn-primary'"
+              [defaultTranslation]="{key: 'invite-viewers-modal_send-invitations'}"
+              [loadingTranslation]="{key: 'invite-viewers-modal_sending-invitations'}"
+              [isLoading]="actionInProgress">
+            </custom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

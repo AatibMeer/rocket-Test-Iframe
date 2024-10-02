@@ -1,0 +1,26 @@
+<rl-modal fakePath="payment/payOutFailed" rl-test="payout-failed">
+  <rl-modal-header-branded product="wallet">
+      <h1 rl-modal-title rl-typography="heading">
+          {{ 'payout-failed.header' | translate }}
+      </h1>
+      <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <p
+      [class]="bem('heroText')"
+      rl-modal-body-part="heroText"
+      rl-modal-description
+      rl-typography="bold">
+      {{ 'payout-failed.headline' | translate:{amount:amountPending} }}
+    </p>
+    <p>{{ 'payout-failed.body' | translate:{account:accountDescription} }}</p>
+    <div rl-modal-body-part="actionsContainer">
+      <custom-button
+              btnClass="btn btn-primary"
+              (onClick)="closeModal()"
+              rl-modal-body-part="primaryAction"
+              rl-test="payout-failed-cta"
+      >{{ 'payout-failed.confirm' | translate }}</custom-button>
+  </div>
+  </rl-modal-body>
+</rl-modal>

@@ -1,0 +1,5 @@
+<span (click)="$event.stopPropagation();" [class.show]="show" class="tooltip-arrow">
+    <span #tooltip (rl-clickOutside)="closeTooltip()" class="tooltip-info">
+        <p class="tooltip-content" [innerHtml]="content"></p>
+    </span>
+</span>

@@ -1,0 +1,26 @@
+<rl-modal fakePath="kyc" rl-test="kyc-details">
+    <rl-modal-header>
+        <h1 rl-modal-title rl-typography="heading">
+            {{ 'payment-kyc-verify.header' | translate }}
+        </h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header>
+    <rl-modal-body>
+        <rl-kyc-get-verified
+            #form
+            brandCode="{{ this.brandID }}"
+            forceEmail="{{ this.currentPartyEmail }}"
+            identityBaseURL="{{ this.identityBaseURL }}"
+            partyID="{{ this.partyID }}"
+            paymentAccountID="{{ this.paymentAccountID }}"
+            peerPaymentsBaseURL="{{ this.peerPaymentsBaseURL }}"
+            personID="{{ this.personID }}"
+            resolveStatusTimeout="{{15000}}"
+            rlAccessToken="{{ this.rlAccessToken }}"
+            scroll-to-invalid-control
+            stripeAPIKey="{{ this.stripeAPIKey }}"
+            validation-order="flow-reverse"
+            verifyForHighPayout="{{ this.highPayout }}"
+        ></rl-kyc-get-verified>
+    </rl-modal-body>
+</rl-modal>

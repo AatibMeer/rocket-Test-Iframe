@@ -1,0 +1,69 @@
+<rl-modal fakePath="edit" rl-test="edit-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon settings" role="presentation"></i>
+      <span translate>edit-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <div class="content-container">
+        <h3 class="content-heading">
+          <com [key]="'edit-modal_second-heading'"></com>
+        </h3>
+        <div class="options-list">
+          @if (backToInterviewIsEnabled) {
+            <div class="option">
+              <input [(ngModel)]="editOption" [value]="'interview'" name="edit-option" type="radio" id="changeAnswers">
+              <label for="changeAnswers">
+                <div class="option-heading">
+                  <span class="custom-radio-edit"></span>
+                  <span class="heading-text">
+                    <com [key]="'edit-modal_change-answers'"></com>
+                  </span>
+                  <span class="difficulty-level">
+                    <com [key]="'edit-modal_easy'"></com>
+                  </span>
+                </div>
+                <div class="option-content">
+                  <span>
+                    <com [key]="'edit-modal_change-answers-desc'"></com>
+                  </span>
+                </div>
+              </label>
+            </div>
+          }
+          @if (advancedEditorIsEnabled) {
+            <div class="option">
+              <input [(ngModel)]="editOption" [value]="'advancedEditor'" name="edit-option" type="radio"
+                id="advancedEditor">
+              <label for="advancedEditor">
+                <div class="option-heading">
+                  <span class="custom-radio-edit"></span>
+                  <span class="heading-text">
+                    <com [key]="'edit-modal_advanced-editor'"></com>
+                  </span>
+                  <span class="difficulty-level gray-text">
+                    <com [key]="'edit-modal_advanced'"></com>
+                  </span>
+                </div>
+                <div class="option-content">
+                  <span>
+                    <com [key]="'edit-modal_advanced-editor-desc'"></com>
+                  </span>
+                </div>
+              </label>
+            </div>
+          }
+        </div>
+        <div class="bottom-buttons">
+          <button class="btn btn-primary e2e_continue-button-edit-modal" (click)="continueToEdit()">
+            <com [key]="'edit-modal_continue'"></com>
+          </button>
+        </div>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

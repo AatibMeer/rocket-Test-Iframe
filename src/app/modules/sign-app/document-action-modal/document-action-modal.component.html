@@ -1,0 +1,73 @@
+<rl-modal fakePath="documentActionModal" rl-test="cancel-decline-sign">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon pencil" role="presentation"></i>
+      <span>{{modalTextDefinitions.modalHeader.key | translate: modalTextDefinitions.modalHeader.params }}</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <h2 class="dialog-headings strong">
+        <com [key]="modalTextDefinitions.heading.key"
+        [params]="modalTextDefinitions.heading.params"></com>
+      </h2>
+      <h5 class="dialog-headings">
+        <com [key]="modalTextDefinitions.explanation.key"
+        [params]="modalTextDefinitions.explanation.params"></com>
+      </h5>
+      @if (modalTextDefinitions.reasonLabel?.key) {
+        <h5 class="dialog-headings">
+          <com [key]="modalTextDefinitions.reasonLabel.key"
+          [params]="modalTextDefinitions.reasonLabel.params"></com>
+        </h5>
+      }
+
+      @if (actionReasons.length != 0) {
+        <select name="reason" id="reason" [(ngModel)]="selectedReason">
+          @for (reason of actionReasons; track reason) {
+            <option  [comValue]="reason.value">
+              <com [key]="reason.translation_key"></com>
+            </option>
+          }
+        </select>
+      }
+
+      @if (selectedReason == 'other') {
+        <div class="custom-message">
+          <div>
+            <textarea [class.invalid]="customMessage?.length > 2048" [(ngModel)]="customMessage"
+              [comPlaceholder]="'cancel-signing-modal_textarea-placeholder'"
+              name="custom-message"
+            cols="20" rows="10"></textarea>
+            <div class="char-counter" [ngClass]="{'over-limit': customMessage?.length > 2048}">
+              <span>{{customMessage.length ? customMessage.length : 0}}/2049</span>
+            </div>
+            @if (customMessage?.length > 2048) {
+              <span class="rl-icon dispute"></span>
+            }
+          </div>
+          <div [ngClass]="{'over-limit': customMessage?.length > 2048}" class="text-length-error">
+            <com [key]="'cancel-signing-modal_text-to-long'"></com>
+          </div>
+        </div>
+      }
+
+      <div class="bottom-buttons">
+        <button (click)="hideModal()" class="btn btn-secondary">
+          <com [key]="modalTextDefinitions.secondaryCta.key" [params]="modalTextDefinitions.secondaryCta.params"></com>
+        </button>
+        <custom-button
+          (onClick)="resolveAction()"
+          [btnType]="'button'"
+          [btnClass]="'btn btn-primary e2e_primary-cta'"
+          [defaultTranslation]="{key: modalTextDefinitions.primaryCta.key, params: modalTextDefinitions.primaryCta.params}"
+          [loadingTranslation]="{key: modalTextDefinitions.primaryOngoingCta.key, params: modalTextDefinitions.primaryOngoingCta.params}"
+          [isLoading]="actionInProgress"
+          [isDisabled]="(selectedReason == 'other') && (customMessage.length > 2048)">
+        </custom-button>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

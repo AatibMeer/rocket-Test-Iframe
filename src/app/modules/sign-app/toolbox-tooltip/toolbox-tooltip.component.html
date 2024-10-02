@@ -1,0 +1,17 @@
+<div #tooltipArrow [@scaleAndFade]="{value: ':enter', params: {scale: this.zoomLevel}}" [ngStyle]="tooltipArrowStyles" class="arrow enable-hardware-accel">
+  <div #tooltip [ngStyle]="tooltipStyles" [style.transform]="cssTranslateVal" class="simple-tooltip">
+    <div class="tools">
+      @for (tool of tools; track tool) {
+        <div
+          (click)="createInput(pageClickEvent, tool.type)"
+          title="{{tool.title}}"
+          class="single-tool">
+          <span class="rl-icon {{tool.iconClass}}"></span>
+        </div>
+      }
+      <li (click)="hideTooltip.emit()" class="single-tool" title="Remove">
+        <span class="rl-icon toolbar-trash"></span>
+      </li>
+    </div>
+  </div>
+</div>

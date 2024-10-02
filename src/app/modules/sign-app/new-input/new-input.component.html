@@ -1,0 +1,127 @@
+<!-- This component can be dragged and dropped.
+BEWARE: Changes to its structure may alter/break the existing drag and drop behaviour. -->
+
+<div #newInput
+  (mouseup)="onMouseUp($event)"
+  (mousedown)="onMouseDown($event)"
+  [@scaleAndFade]
+  [id]="input.id"
+  class="draggable noselect"
+  [attr.data-id]="input.id"
+  [class.placeholder]="input.position.type == 'PLACEHOLDER'"
+  [class.disabled-cursor]="input.position.type == 'PLACEHOLDER' && !this.documentWasEditedUsingAdvancedEditor"
+  [class.active]="input.active || input.warning"
+  [class.dragging]="input.active || input.warning"
+  [class.resizing]="input.active || input.warning"
+  [class.custom-text]="input.type == 'CUSTOM_TEXT'"
+  [ngStyle]="getBoxStyle()"
+  (mouseover)="hover=true"
+  (mouseleave)="hover=false"
+  [ngStyle]="getBoxStyle()"
+  [attr.rl-input-owner]="partyAssignedToInput.legalName"
+  class="draggable noselect">
+  @if (input.position.type == 'PLACEHOLDER' && (signatureBuilderModeEnabled || inputsNeedRepositioningAfterDocumentEdit)) {
+    <span [ngStyle]="{'color': partyAssignedToInput.metaData.style.background}" class="rl-icon lock"></span>
+  }
+  @if (input.position.type != 'PLACEHOLDER' && (input.active || input.warning)) {
+    <span
+      [@resizeIconScaleAndFade]
+    class="rl-icon resize-icon resize-control bottom right"></span>
+  }
+  <span class="new-input noselect"
+    [id]="input.id"
+    [ngStyle]="getInputTextAlignment()"
+    [attr.data-id]="input.id">
+    @if (input.type != 'DATE_SIGNED') {
+      <span class="icon-wrapper">
+        @if (input.type == 'SIGNATURE_TEXT') {
+          <span
+            [ngStyle]="{'font-size' : this.iconFontSizes[input.type]}"
+            class="rl-icon toolbar-signature">
+          </span>
+        }
+        @if (input.type == 'INITIALS') {
+          <span
+            [ngStyle]="{'font-size' : this.iconFontSizes[input.type]}"
+            class="rl-icon toolbar-initial">
+          </span>
+        }
+        @if (input.type == 'CUSTOM_TEXT') {
+          <span
+            [ngStyle]="{'font-size' : this.iconFontSizes[input.type]}"
+            class="rl-icon custom-text-icon">
+          </span>
+        }
+      </span>
+    }
+    <span class="content-wrapper" #contentWrapper [ngStyle]="getInputTextAlignment()">
+      @if (input.type != 'DATE_SIGNED' && !hasLegalNamePlaceholder()) {
+        <span class="legal-name e2e_field-owner-attribute"
+          [fittext]="true"
+          [activateOnResize]="true"
+          [modelToWatch]="partyAssignedToInput.legalName"
+          [minFontSize]="6"
+          [maxFontSize]="20"
+          [container]="this.contentWrapper.nativeElement"
+        >{{partyAssignedToInput.legalName}}</span>
+      }
+
+      @if (input.type != 'DATE_SIGNED' && hasLegalNamePlaceholder()) {
+        <span class="legal-name e2e_field-owner-attribute"
+          [fittext]="true"
+          [activateOnResize]="true"
+          [modelToWatch]="legalNamePlaceholder"
+          [minFontSize]="6"
+          [maxFontSize]="20"
+          [container]="this.contentWrapper.nativeElement"
+        >{{legalNamePlaceholder}}</span>
+      }
+
+      @if (input.type == 'DATE_SIGNED') {
+        <span class="date e2e_field-owner-attribute"
+          [fittext]="true"
+          [activateOnResize]="true"
+          [modelToWatch]="partyAssignedToInput.legalName"
+          [minFontSize]="6"
+          [maxFontSize]="16"
+          [container]="this.contentWrapper.nativeElement"
+        >{{translatedDateFormat}}</span>
+      }
+    </span>
+  </span>
+  @if (input.type != 'CUSTOM_TEXT') {
+    <span
+      [ngStyle]="{'background-color': partyAssignedToInput.metaData.style.background}"
+      class="transparent-background">
+    </span>
+  }
+  @if (input.type == 'CUSTOM_TEXT' && !isIE) {
+    <span
+      [ngStyle]="(hover || input.active || input.warning) ? {'background-image': setCustomTextGradient(partyAssignedToInput), 'background-size': '100% ' + this.getCustomTextLineHeight() + 'px'} : {}"
+      class="custom-text transparent-background">
+    </span>
+  }
+  @if (input.type == 'CUSTOM_TEXT' && isIE) {
+    <span
+      [ngStyle]="(hover || input.active || input.warning) ? {'background-image': setIECustomTextGradient(partyAssignedToInput), 'background-size': '100% ' + this.getCustomTextLineHeight() + 'px'} : {}"
+      class="custom-text transparent-background">
+    </span>
+  }
+  <!-- tooltip start -->
+  @if (input.active || input.warning) {
+    <span
+      [@scaleAndFade]="{value: ':enter', params: {scale: this.zoomLevel}}"
+      [ngStyle]="tooltipArrowStyles"
+      class="arrow" (mouseup)="$event.stopPropagation()" (mousedown)="$event.stopPropagation()">
+      <span #tooltip [ngStyle]="tooltipStyles" class="simple-tooltip">
+        <ul class="tools">
+          <li title="Edit" (click)="openInputEditModal($event)" class="single-tool"><span class="rl-icon toolbar-edit"></span></li>
+          @if (input.position.type != 'PLACEHOLDER') {
+            <li title="Remove" (click)="deleteInput($event)" class="single-tool delete-input"><span class="rl-icon toolbar-trash"></span></li>
+          }
+        </ul>
+      </span>
+    </span>
+  }
+  <!-- tooltip end -->
+</div>

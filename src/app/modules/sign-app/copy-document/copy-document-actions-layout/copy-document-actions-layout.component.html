@@ -1,0 +1,37 @@
+<section class="header">
+  @if (headerIcon) {
+    <i class="rl-icon {{headerIcon}} header__icon" role="presentation"></i>
+  }
+  <p rl-modal-body-part="regularContent" rl-test="action-modal-primary-title" rl-typography="bold">
+    <ng-content select=".heading"></ng-content>
+  </p>
+  <p rl-modal-body-part="regularContent" rl-test="action-modal-primary-description">
+    <ng-content select=".description-primary"></ng-content>
+  </p>
+  <p rl-modal-body-part="regularContent" rl-test="action-modal-primary-description"
+    rl-typography="bold" translate>
+    <ng-content select=".description-secondary"></ng-content>
+  </p>
+</section>
+
+@if (primaryCta || secondaryCta) {
+  <section class="main-actions">
+    @if (primaryCta) {
+      <button
+        class="btn btn-primary"
+        (click)="ctaClick.emit(primaryCta.menuItemId)"
+        [rl-test]="primaryCta.menuItemId | lowercase"
+        rl-modal-body-part="regularContent">
+        {{ primaryCta.displayName }}
+      </button>
+    }
+    @if (secondaryCta) {
+      <button
+        class="btn btn-secondary"
+        (click)="ctaClick.emit(secondaryCta.menuItemId)"
+        [rl-test]="secondaryCta.menuItemId | lowercase">
+        {{ secondaryCta.displayName }}
+      </button>
+    }
+  </section>
+}

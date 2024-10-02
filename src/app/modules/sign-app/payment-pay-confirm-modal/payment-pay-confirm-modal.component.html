@@ -1,0 +1,79 @@
+<rl-modal [class]="rootClassnames" fakePath="payment/confirmPay" rl-test="payment-use-method-confirmation">
+    <rl-modal-header-branded product="wallet">
+        <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+        <h1 rl-modal-title rl-typography variant="heading">
+            <i class="rl-icon card {{bem('header-icon')}}" role="presentation"></i>
+            {{ 'payment-pay-confirm-modal.header' | translate }}
+        </h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded>
+    <rl-modal-body>
+        <p [class]="bem('description')" rl-modal-description rl-modal-body-part="heroText" class="bold-700">
+            {{ 'payment-pay-confirm-modal.description' | translate }}
+        </p>
+        <div class="{{bem('panel')}} {{bem('avatars')}}" rl-modal-body-part="regularContent" role="presentation">
+            <rl-party-avatar [party]="payer" title="{{ 'payment-pay-confirm-modal.to_you' | translate }}"></rl-party-avatar>
+            <div class="rl-icon arrow_bidirectional {{bem('avatar-arrows')}}"></div>
+            <rl-party-avatar [party]="recipient" [title]="recipient?.legalName"></rl-party-avatar>
+        </div>
+        <table rlTable>
+            <tbody>
+                <tr rlTableRow>
+                    <th rlTableHeader>
+                        {{ 'payment-pay-confirm-modal.payment-amount' | translate }}
+                    </th>
+                    <td rlTableCell>{{ paymentAmount | currency:paymentCurrencyCode:'symbol':'1.2' }}</td>
+                </tr>
+                <tr rlTableRow>
+                    <th rlTableHeader>
+                        {{ 'payment-pay-confirm-modal.payment-recipient' | translate }}
+                    </th>
+                    <td rlTableCell [attr.data-pii]="'value'">{{ recipient?.legalName }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div rl-modal-body-part="regularContent">
+            <span rl-inclusively-hidden="visualOnly">
+                <!-- accessible description -->
+                {{ paymentServiceSummaryAccessible }}
+            </span>
+            <!-- from your -->
+            <div [class]="bem('from-your')" role="presentation">{{ 'payment-pay-confirm-modal.payment-from-source-visible' | translate }}</div>
+            <rl-pay-method-summary
+                    #payMethodSummary
+                    [class]="bem('method')"
+                    rl-test="pay-method"
+                    name="{{ paymentMethod.name }}"
+                    logo="{{ paymentMethod.logo }}"
+                    identifier="{{ paymentMethod.last4 }}"
+                    radio-enabled="false"
+                    cog-enabled="true"
+            >{{ paymentMethod.name }}</rl-pay-method-summary>
+        </div>
+        <p
+                [class]="bem('service-agreement')"
+                [comContent]="serviceAgreement"
+                propagateStyles
+                rl-typography="small"
+                rl-modal-body-part="regularContent"
+                rl-test="legal-agreement"
+        ></p>
+        <div rl-modal-body-part="actionsContainer">
+            <button class="btn btn-primary {{bem('send-now')}}"
+                    rl-class="{{ loading ? 'disabled' : '' }}"
+                    (click)="payNowClick.emit()"
+                    [disabled]="loading"
+                    rl-modal-body-part="primaryAction"
+                    rl-typography
+                    rl-test="send-now-cta"
+                    variant="button">
+                <span [hidden]="loading" translate>payment-pay-confirm-modal.send-now</span>
+                <img alt=""
+                     [class]="bem('loading-spinner')"
+                     [hidden]="!loading"
+                     role="presentation"
+                     src="images/signapp/rolling.svg">
+            </button>
+        </div>
+    </rl-modal-body>
+</rl-modal>

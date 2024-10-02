@@ -1,0 +1,37 @@
+<rl-modal fakePath="finalise" rl-test="owner-finalise-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <span translate>owner-finalise-warning-modal_header</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-content">
+      <h4 class="modal-content-heading"><com [key]="'owner-finalise-warning-modal_prompt'"></com></h4>
+      <div class="description">
+        <com [key]="'owner-finalise-warning-modal_description'"></com>
+      </div>
+      <div class="required-button">
+        <input type="checkbox" id="input-required" name="input-required" [checked]="!showAgain" (change)="showAgain = !showAgain">
+        <label class="required-label" for="input-required">
+          <span class="rl-icon checkbox-check doc-man-checkbox"></span>
+          <com [key]="'owner-finalise-warning-modal_checkbox'"></com>
+        </label>
+      </div>
+      <div class="bottom-buttons">
+        <custom-button
+            [btnType]="'submit'"
+            [btnClass]="'btn btn-primary'"
+            [isLoading]="actionInProgress"
+            (onClick)="finalise()"
+            [defaultTranslation]="{key: 'owner-finalise-warning-modal_confirm-btn'}"
+            [loadingTranslation]="{key: 'owner-finalise-warning-modal_confirm-btn-saving'}">
+        </custom-button>
+        <button (click)="close()" type="button" class="btn btn-secondary">
+          <com [key]="'owner-finalise-warning-modal_cancel-btn'"></com>
+        </button>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

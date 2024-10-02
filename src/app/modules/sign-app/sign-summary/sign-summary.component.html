@@ -1,0 +1,26 @@
+<div class="progress-banner">
+  <div class="button-wrapper-bottom">
+    <div class="inner-wrapper space-between-mobile">
+      @if (binder.status == 'IN_PREPARATION') {
+        <custom-button
+          (onClick)="cancel()"
+          [btnType]="'button'"
+          [btnClass]="'btn btn-secondary'"
+          [defaultTranslation]="{key: 'sign-summary_cancel'}"
+          [loadingTranslation]="{key: 'sign-summary_cancelling'}"
+          [isLoading]="cancelInProgress">
+        </custom-button>
+      }
+      @if (binder.status == 'IN_PREPARATION') {
+        <custom-button
+          (onClick)="saveChanges()"
+          [btnType]="'button'"
+          [btnClass]="'btn btn-primary finish-btn e2e_save-changes'"
+          [defaultTranslation]="{key: 'sign-summary_save-changes'}"
+          [loadingTranslation]="{key: 'sign-summary_saving'}"
+          [isLoading]="actionInProgress">
+        </custom-button>
+      }
+    </div>
+  </div>
+</div>

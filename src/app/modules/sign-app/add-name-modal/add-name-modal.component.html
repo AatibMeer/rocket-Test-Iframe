@@ -1,0 +1,58 @@
+<rl-modal fakePath="addName" rl-test="add-name-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon review-invite" role="presentation"></i>
+      <span translate>add-name-modal_heading</span>
+    </h1>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <div class="content-container">
+        <p class="content-heading"><com [key]="'add-name-modal_description'"></com></p>
+        <p class="content-description"><com [key]="'add-name-modal_full_description'"></com></p>
+        <form class="add-name-form" [ngFormOptions]="{updateOn: 'submit'}" rl-test="add-name-form" #form="ngForm" (submit)="updateName(form)">
+          <div class="form-control">
+            <label for="firstName"><com [key]="'add-name-modal_first_name'"></com></label>
+            <input id="firstName"
+              required
+              name="firstName"
+              #firstName="ngModel"
+              minlength="2"
+              [(ngModel)]="currentUserFirstName"
+              pattern=".*\w.*"
+              rl-test="add-first-name-input">
+            <span class="rl-icon dispute"></span>
+          </div>
+          <div class="form-control">
+            <label for="lastName"><com [key]="'add-name-modal_last_name'"></com></label>
+            <input id="lastName"
+              required
+              name="lastName"
+              #lastName="ngModel"
+              minlength="2"
+              [(ngModel)]="currentUserLastName"
+              pattern=".*\w.*"
+              rl-test="add-last-name-input">
+            <span class="rl-icon dispute"></span>
+          </div>
+          @if (form.invalid && form.touched) {
+            <div rl-test="error-empty" class="error">
+              <span><com key="add-name-modal_form-error"></com></span>
+            </div>
+          }
+          <div class="bottom-buttons bottom-buttons-centered">
+            <custom-button
+              [btnType]="'submit'"
+              [btnClass]="'btn btn-primary'"
+              [defaultTranslation]="{key: 'add-name-modal_done'}"
+              [loadingTranslation]="{key: 'add-name-modal_in-progress'}"
+              [isLoading]="actionInProgress"
+              rl-test="add-name-modal-cta">
+            </custom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

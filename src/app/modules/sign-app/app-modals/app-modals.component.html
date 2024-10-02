@@ -1,0 +1,368 @@
+<action-modal
+  #actionModal
+  *ngIf="modalShown == 'actionModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    $event.nextModal === 'end' ? closeModal() : onModalAction($event.nextModal)
+  "
+>
+</action-modal>
+
+<document-editor
+  *ngIf="documentEditorModeEnabled && docHtml"
+  [docHtml]="docHtml"
+  (onDocUpdate)="onDocUpdate()"
+  (onBinderUpdate)="onBinderUpdate()"
+>
+</document-editor>
+
+<edit-modal
+  *ngIf="modalShown == 'editModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('editModal', $event.nextModal)"
+>
+</edit-modal>
+
+<edit-warning-modal
+  *ngIf="modalShown == 'advancedEditorWarningModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('advancedEditorWarningModal', $event.nextModal)
+  "
+>
+</edit-warning-modal>
+
+<history-panel
+  *ngIf="modalShown == 'historyPanel'"
+  (hideModal)="modalFlowService.end()"
+  [numberOfDocs]="documents?.length"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('historyPanel', $event.nextModal)"
+>
+</history-panel>
+
+<add-name-modal
+  *ngIf="modalShown == 'addNameModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('addNameModal', $event.nextModal)"
+></add-name-modal>
+
+<owner-finalise-warning-modal
+  *ngIf="modalShown == 'ownerFinaliseWarningModal'"
+  [@animateModalChildren]
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('ownerFinaliseWarningModal', $event.nextModal)
+  "
+>
+</owner-finalise-warning-modal>
+
+<edit-title-modal
+  *ngIf="modalShown == 'editDocTitleModal'"
+  [@animateModalChildren]
+  [docIndex]="editableDocIndex"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('editDocTitleModal', $event.nextModal)
+  "
+>
+</edit-title-modal>
+
+<add-signer-data-modal
+  *ngIf="modalShown == 'addSignerDataModal'"
+  [originalOwnerPartyReference]="originalOwnerPartyReference"
+  (showModalWithDelay)="showModalWithDelay($event)"
+  [proceedWithNextActionsOnSave]="proceedWithNextActionsOnSave"
+  [proceedWithEditInputOnSave]="proceedWithEditInputOnSave"
+  [introToUse]="addSignerDataModalIntroText"
+  [forceUserToAddData]="forceUserToAddData"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('addSignerDataModal', $event.nextModal)
+  "
+>
+</add-signer-data-modal>
+
+<rl-invite-collaborators-connected-modal
+  *ngIf="modalShown === 'inviteCollaboratorsModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('inviteCollaboratorsModal', $event.nextModal)
+  "
+></rl-invite-collaborators-connected-modal>
+
+<invite-viewers-modal
+  *ngIf="modalShown == 'inviteViewersModal'"
+  [binder]="binder"
+  (startAction)="onModalAction($event)"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('inviteViewersModal', $event.nextModal)
+  "
+>
+</invite-viewers-modal>
+
+<cancel-signing-modal
+  *ngIf="modalShown == 'cancelSigningModal'"
+  (onCancellationConfirmed)="onCancel()"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('cancelSigningModal', $event.nextModal)
+  "
+>
+</cancel-signing-modal>
+
+<remove-signature-modal
+  *ngIf="modalShown == 'removeSignatureModal'"
+  (onCancellationConfirmed)="onCancel()"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('removeSignatureModal', $event.nextModal)
+  "
+>
+</remove-signature-modal>
+
+<decline-to-sign-modal
+  *ngIf="modalShown == 'declineSigningModal'"
+  (declineConfirmed)="onDecline()"
+  [docOwnerName]="ownerLegalName"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('declineSigningModal', $event.nextModal)
+  "
+>
+</decline-to-sign-modal>
+
+<manage-modal
+  *ngIf="modalShown == 'manageModal'"
+  [signingFinished]="signingComplete"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('manageModal', $event.nextModal)"
+>
+</manage-modal>
+
+<manage-viewers-modal
+  *ngIf="modalShown == 'manageViewersModal'"
+  (startAction)="onModalAction($event)"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('manageViewersModal', $event.nextModal)
+  "
+>
+</manage-viewers-modal>
+
+<initials-modal
+  *ngIf="editedInput && editedInput.type == 'INITIALS'"
+  [showModal]="true"
+  [input]="editedInput"
+  [currentUserLegalName]="currentUserLegalName"
+  (signatureModalSubmitted)="highlightNextInput()"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="closeSigModal('initialsModal', $event)"
+>
+</initials-modal>
+
+<signature-modal
+  *ngIf="editedInput && editedInput.type == 'SIGNATURE_TEXT'"
+  [showModal]="true"
+  [input]="editedInput"
+  [currentUserLegalName]="currentUserLegalName"
+  (signatureModalSubmitted)="highlightNextInput()"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="closeSigModal('signatureModal', $event)"
+>
+</signature-modal>
+
+<edit-input-modal
+  *ngIf="modalShown === 'editInputModal'"
+  (editParty)="modalFlowService.forward()"
+  (hideModal)="modalFlowService.end()"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('editInputModal', $event.nextModal)"
+>
+</edit-input-modal>
+
+<repositioning-demo-modal
+  *ngIf="modalShown == 'repositioningDemoModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('repositioningDemoModal', $event.nextModal)
+  "
+>
+</repositioning-demo-modal>
+
+<how-it-works-modal
+  *ngIf="modalShown == 'howItWorksModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('howItWorksModal', $event.nextModal)"
+>
+</how-it-works-modal>
+
+<rl-edit-party-modal-connected
+  *ngIf="modalShown === 'editPartyModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('editPartyModal', $event.nextModal)"
+  language="edit-party-modal"
+></rl-edit-party-modal-connected>
+
+<rl-edit-party-modal-connected
+  *ngIf="modalShown === 'editSignerModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="routeModal('editSignerModal', $event.nextModal)"
+  language="edit-party-modal-signers"
+></rl-edit-party-modal-connected>
+
+<rl-payment-kyc-verify-modal
+  *ngIf="modalShown == 'paymentKYCVerifyModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentKYCVerifyModal', $event.nextModal)
+  "
+>
+</rl-payment-kyc-verify-modal>
+
+<rl-payment-kyc-verify-result-modal
+  *ngIf="modalShown === 'paymentKYCVerifyResultModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentKYCVerifyResultModal', $event.nextModal)
+  "
+>
+</rl-payment-kyc-verify-result-modal>
+
+<rl-payment-plaid-modal
+  *ngIf="modalShown == 'paymentPlaidModal'"
+  (hideModal)="routeModal('paymentPlaidModal', $event.nextModal)"
+>
+</rl-payment-plaid-modal>
+
+<rl-payment-ach-plaid-modal
+  *ngIf="modalShown == 'paymentAchPlaidModal'"
+  (hideModal)="routeModal('paymentAchPlaidModal', $event.nextModal)"
+>
+</rl-payment-ach-plaid-modal>
+
+<rl-payment-paying-modal
+  *ngIf="modalShown == 'paymentPayerModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentPayerModal', $event.nextModal)
+  "
+>
+</rl-payment-paying-modal>
+
+<rl-payment-select-role-modal
+  *ngIf="modalShown === 'paymentSelectRoleModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentSelectRoleModal', $event.nextModal)
+  "
+></rl-payment-select-role-modal>
+
+<rl-payment-recipient-modal
+  *ngIf="modalShown === 'paymentPayeeModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentPayeeModal', $event.nextModal)
+  "
+></rl-payment-recipient-modal>
+
+<rl-payment-failed-modal
+  *ngIf="modalShown === 'paymentFailedModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentFailedModal', $event.nextModal)
+  "
+></rl-payment-failed-modal>
+
+<rl-payment-creator-modal
+  *ngIf="modalShown === 'paymentCreatorModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentCreatorModal', $event.nextModal)
+  "
+></rl-payment-creator-modal>
+
+<rl-add-signatures-selector-modal
+  *ngIf="modalShown === 'addSignaturesSelectorModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('addSignaturesSelectorModal', $event.nextModal)
+  "
+></rl-add-signatures-selector-modal>
+
+<rl-payment-details-connected-modal
+  *ngIf="modalShown === 'paymentDetailsModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentDetailsModal', $event.nextModal)
+  "
+></rl-payment-details-connected-modal>
+
+<rl-payment-status-modal-connected
+  *ngIf="modalShown === 'paymentStatusModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentStatusModal', $event.nextModal)
+  "
+></rl-payment-status-modal-connected>
+
+<rl-ask-for-refund-modal
+  *ngIf="modalShown === 'askForRefundModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('askForRefundModal', $event.nextModal)
+  "
+></rl-ask-for-refund-modal>
+
+<rl-remove-payment-modal
+  *ngIf="modalShown === 'removePaymentModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('removePaymentModal', $event.nextModal)
+  "
+></rl-remove-payment-modal>
+
+<rl-payment-method-modal
+  *ngIf="modalShown === 'paymentChoosePaymentMethod'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentChoosePaymentMethod', $event.nextModal)
+  "
+></rl-payment-method-modal>
+
+<rl-payment-pay-now-modal
+  *ngIf="modalShown == 'paymentPayNowModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentPayNowModal', $event.nextModal)
+  "
+>
+</rl-payment-pay-now-modal>
+
+<rl-payment-pay-confirm-modal-connected-component
+  *ngIf="modalShown === 'paymentPayConfirmModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('paymentPayConfirmModal', $event.nextModal)
+  "
+>
+</rl-payment-pay-confirm-modal-connected-component>
+
+<rl-payout-failed
+  *ngIf="modalShown == 'payoutFailedModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('payoutFailedModal', $event.nextModal)
+  "
+>
+</rl-payout-failed>
+
+<export-document-modal
+  *ngIf="modalShown === 'exportDocumentModal'"
+  [rl-modal-transition]="modalFlowService.direction"
+  (rl-modal-transition-onHide)="
+    routeModal('exportDocumentModal', $event.nextModal)
+  "
+>
+</export-document-modal>

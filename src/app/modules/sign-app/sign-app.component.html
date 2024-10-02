@@ -1,0 +1,13 @@
+@if ((!pageLoaded)) {
+  <img *ngIf="(!pageLoaded)" src="images/signapp/rolling.svg" width="200" height="200" alt="Loading" class="loading-spinner">
+}
+@if (pageLoaded) {
+  <div class="branding-wrapper" [style]="brandingStyles">
+    @if (showHeader) {
+      <header>
+        <div class="logo"></div>
+      </header>
+    }
+    <router-outlet></router-outlet>
+  </div>
+}

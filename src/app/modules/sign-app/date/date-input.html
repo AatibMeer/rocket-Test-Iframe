@@ -1,0 +1,50 @@
+@if (!options.inline) {
+  <rl-text-input [class]="bem()" [color]="color">
+    <i
+      #prepend
+      class="rl-icon calendar {{bem('calendar-icon')}}"
+      (click)="calendarIconClick()"
+      rl-typography
+      role="presentation"
+    ></i>
+    <input
+      #input
+      angular-mydatepicker
+      [locale]="locale"
+      autocomplete="off"
+      (dateChanged)="onDateChange($event)"
+      [id]="id"
+      (focus)="inputFocus()"
+      [ngModel]="dateModel"
+      [options]="options"
+      rl-quick-date="moment"
+      [rl-quick-date-options]="{locale: locale}"
+      rl-test="date-input"
+      >
+    <i
+      #append
+      class="rl-icon alert-info {{bem('alert-icon')}}"
+      [hidden]="!invalid"
+      role="presentation"
+    ></i>
+  </rl-text-input>
+} @else {
+  <input
+    angular-mydatepicker
+    [locale]="locale"
+    [class]="bem('inline-input')"
+    (dateChanged)="onDateChange($event)"
+    [ngModel]="dateModel"
+    [options]="options"
+    >
+}
+<ng-template #inline>
+  <input
+    angular-mydatepicker
+    [locale]="locale"
+    [class]="bem('inline-input')"
+    (dateChanged)="onDateChange($event)"
+    [ngModel]="dateModel"
+    [options]="options"
+    >
+</ng-template>

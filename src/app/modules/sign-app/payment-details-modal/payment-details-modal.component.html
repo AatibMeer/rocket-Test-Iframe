@@ -1,0 +1,97 @@
+<rl-modal fakePath="payment/createAgreement/amount" rl-test="payment-details">
+    <rl-modal-header-branded product="wallet">
+        <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+        <h1 rl-modal-title rl-typography="heading">
+            <i class="rl-icon card" role="presentation"></i>
+            {{ 'payment-details-modal.header' | translate }}
+        </h1>
+        <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+    </rl-modal-header-branded>
+    <rl-modal-body>
+        <p
+                [class]="bem('heroText')"
+                rl-modal-body-part="heroText"
+                rl-modal-description
+                class="bold-700"
+                translate
+        >payment-details-modal.description</p>
+        <div>
+            <div rl-modal-body-part="interestPanel">
+                <div [class]="bem('payment-panel')">
+                    <rlng-input control-id="amount" #amount [formControl]="amountControl">
+                        <div data-label #label rl-inclusively-hidden translate>payment-details-modal.amount-label</div>
+                        <rl-text-input [color]="amount.invalid ? 'error' : 'secondary'" data-control>
+                            <div [class]="bem('currency-picker')" #prepend rl-typography="bold">{{ currencyCode }}</div>
+                            <input
+                                    autocomplete="off"
+                                    (blur)="formatInput()"
+                                    [class]="bem('input')"
+                                    (focus)="clearInput()"
+                                    [formControl]="amountControl"
+                                    [id]="amount.id"
+                                    #input
+                                    inputmode="decimal"
+                                    (keyup.enter)="$event.target.blur(); primaryCTAClick()"
+                                    [readOnly]="loading"
+                                    rlInputFilter="number"
+                                    [attr.aria-describedby]="amount.messagesID"
+                                    rl-test="payment-details-amount"
+                            >
+                            <i class="rl-icon alert-info {{ bem('alert-icon') }}" [hidden]="!amount.invalid" #append></i>
+                        </rl-text-input>
+                        <div data-messages #messages [id]="amount.messagesID" rl-test="payment-details-amount-errors" rl-typography="error">
+                            <div [hidden]="!amount.showErrorMessage('required')" translate>payment-details-modal.error-numeric</div>
+                            <div [hidden]="!amount.showErrorMessage('numeric')" translate>payment-details-modal.error-numeric</div>
+                            <div [hidden]="!amount.showErrorMessage('min')">{{ minErrorMessage }}</div>
+                            <div [hidden]="!amount.showErrorMessage('max')">{{ maxErrorMessage }}</div>
+                        </div>
+                    </rlng-input>
+                    <div
+                        [@openCloseRate]="showFee ? 'open' : 'closed'"
+                        (@openCloseRate.start)="animationStarted()"
+                        (@openCloseRate.done)="animationFinished()"
+                        aria-live="polite"
+                        [class]="bem('expand-container', {visible: feeIsVisible})"
+                        rl-test="calculation-container"
+                    >
+                        <table [rl-inclusively-hidden]="showFee ? 'none' : 'assistiveOnly'" rlTable="small">
+                            <tbody>
+                                <tr rlTableRow>
+                                    <th rlTableHeader>
+                                        {{ 'payment-details-modal.wallet-rate' | translate }}
+                                        <span rl-tooltip-host>
+                                            <div class="icon-fee" role="presentation">?</div>
+                                            <rl-simple-tooltip rl-typography="small">
+                                                <p [class]="bem('fee-tooltip-text')" translate>payment-details-modal.wallet-rate-tooltip-1</p>
+                                                <p [class]="bem('fee-tooltip-text')" translate>payment-details-modal.wallet-rate-tooltip-2</p>
+                                                <p [class]="bem('fee-tooltip-text')" translate>payment-details-modal.wallet-rate-tooltip-3</p>
+                                            </rl-simple-tooltip>
+                                        </span>
+                                    </th>
+                                    <td rlTableCell rl-test="payment-details-fee">{{ feeFormatted }}</td>
+                                </tr>
+                                <tr rlTableRow="primary">
+                                    <th rlTableHeader rl-test="payment-details-payee-header">{{ payeeTableHeaderText }}</th>
+                                    <td rlTableCell rl-test="payment-details-receive-amount">
+                                        <rl-typography [bold]="true" color="happy" size="large">{{ receiveAmountFormatted }}</rl-typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div [hidden]="!error" rl-modal-body-part="container" rl-test="payment-details-error">{{ error }}</div>
+        <div rl-modal-body-part="actionsContainer">
+            <custom-button
+                    btnClass="btn btn-primary"
+                    (onClick)="primaryCTAClick()"
+                    [isLoading]="loading"
+                    rl-modal-body-part="primaryAction"
+                    rl-test="payment-details-cta"
+            >{{ 'payment-details-modal.get-quote' | translate }}</custom-button>
+        </div>
+    </rl-modal-body>
+</rl-modal>
+

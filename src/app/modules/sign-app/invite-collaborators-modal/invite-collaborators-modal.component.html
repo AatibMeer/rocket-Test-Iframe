@@ -1,0 +1,119 @@
+<rl-modal fakePath="inviteCollaborators" rl-test="invite-collaborators">
+  <rl-modal-header>
+    <h1 rl-modal-title rl-typography="heading" rl-test="invite-collaborators-header">
+      <i class="rl-icon email-input {{bem('header-icon')}}" role="presentation"></i>
+      <span translate>invite-collaborators-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right" (click)="clearInviteMessage()"></rl-modal-header-close>
+  </rl-modal-header>
+  <rl-modal-body>
+    <div rl-modal-body-part="heroText">
+      <div rl-modal-body-part="container">
+        @if (brandingLevel == 1) {
+          <img class="sign-icon modal-default-icon-color" src="images/rocketsign-logo.svg">
+        }
+        @if (brandingLevel != 1) {
+          <span class="default-icon sign-icon rl-icon swivel-icon modal-default-icon-color"></span>
+        }
+        @if (documents.length === 1) {
+          <div rl-modal-body-part="container">
+            <div rl-modal-description class="bold-700">
+              {{ 'invite-collaborators-modal_docs-ready-to-send-1' | translate }}
+            </div>
+            <div rl-modal-body-part="regularContent">
+              {{ 'invite-collaborators-modal_docs-ready-to-send-description' | translate }}
+            </div>
+          </div>
+        }
+        @if (documents.length > 1) {
+          <div rl-modal-body-part="container">
+            <div rl-modal-description class="bold-700">
+              {{ 'invite-collaborators-modal_docs-ready-to-send-other' | translate }}
+            </div>
+            <div rl-modal-body-part="regularContent">
+              {{ 'invite-collaborators-modal_docs-ready-to-send-description' | translate }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <form [formGroup]="formGroup" rl-modal-body-part="container" (ngSubmit)="sendClicked()">
+      @for (document of documentControls; track document; let isFirst = $first; let i = $index) {
+        <rlng-input
+          control-id="document-{{i}}"
+          [formControl]="document"
+          rl-test="invite-collaborators-document invite-collaborators-document-{{i}}"
+          #inputComponent
+          >
+          <span data-label rl-test="invite-collaborators-document-name-label invite-collaborators-document-name-label-{{ i }}">
+            @if (isFirst) {
+              <span rl-inclusively-hidden="assistiveOnly" translate>{{ documentCount === 1 ? 'invite-collaborators-modal_document-name' : 'invite-collaborators-modal_document-names'}}</span>
+            }
+            <span rl-inclusively-hidden="visualOnly" translate [translateParams]="{document: i, documents: documentCount}">invite-collaborators-modal_document-a11y-label</span>
+          </span>
+          <rl-text-input data-control [color]="inputComponent.invalid ? 'error' : 'secondary'">
+            <input
+              #input
+              [attr.aria-describedby]="inputComponent.messagesID"
+              [formControl]="document"
+              required
+              [id]="inputComponent.id"
+              [class.disabled]="!canChangeDocumentNames"
+              rl-test="invite-collaborators-document-name invite-collaborators-document-name-{{ i }}"
+              >
+            <div #append class="rl-icon alert-info" [hidden]="!inputComponent.invalid" role="presentation"></div>
+          </rl-text-input>
+          <div #messages data-messages rl-typography="error">
+            <div [hidden]="!inputComponent.showErrorMessage('required')" translate>invite-collaborators-modal_document-name-required</div>
+          </div>
+        </rlng-input>
+      }
+      <rlng-input>
+        <span data-label rl-test="invite-collaborators-send-to-label" translate>invite-collaborators-modal_send-to</span>
+        @for (party of invitableParties; track party; let i = $index) {
+          <rl-party
+            [class]="bem('party')"
+            data-control
+            [color]="party?.metaData.style.background"
+            displayProperty="email"
+            [party]="party"
+            [showCog]="binderIsInPreparation"
+            [showRadio]="false"
+            (onCogClick)="cogClicked($event)"
+            rl-test="invite-collaborators-collaborator invite-collaborators-collaborator-{{ i }}"
+          ></rl-party>
+        }
+      </rlng-input>
+      <rlng-input control-id="message" #messageInput formControlName="message">
+        <span data-label #label rl-test="invite-collaborators-message-label" translate>invite-collaborators-modal_add-message</span>
+        <rl-textarea data-control [color]="messageInput.invalid ? 'error' : 'secondary'" [maxlength]="messageMaxLength" [showCounter]="true">
+          <textarea
+            #input
+            data-control
+            rows="5"
+            [id]="messageInput.id"
+            formControlName="message"
+            placeholder="{{ 'invite-collaborators-modal_add-message-placeholder' | translate }}"
+            rl-test="invite-collaborators-message"
+          ></textarea>
+        </rl-textarea>
+        <div #messages data-messages rl-typography="error">
+          <div [hidden]="!messageInput.showErrorMessage('maxlength')" translate>invite-collaborators-modal_text-too-long</div>
+        </div>
+      </rlng-input>
+      <p [class]="bem('caption')" rl-typography="small" translate>invite-collaborators-modal_custom-text-caption</p>
+      <div rl-modal-body-part="actionsContainer">
+        <custom-button
+          btnClass="btn btn-primary"
+          btnType="submit"
+          [class]="bem('cta')"
+          [isLoading]="loading"
+          [loadingTranslation]="{key: 'invite-collaborators-modal_sending-invitations'}"
+          rl-modal-body-part="primaryAction"
+          rl-test="invite-collaborators-cta"
+        >{{ 'invite-collaborators-modal_send-invitations' | translate }}</custom-button>
+      </div>
+    </form>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

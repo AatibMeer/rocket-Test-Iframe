@@ -1,0 +1,21 @@
+<rl-text-input [attr.aria-checked]="ariaChecked"
+  [attr.aria-label]="displayValue"
+  [attr.role]="ariaRole"
+  [class]="bem(undefined)"
+  (click)="click($event)"
+  #component
+  [attr.tabindex]="tabIndex">
+  <i [class]="radioClassnames" #prepend role="presentation"></i>
+  <span [class]="inputClassnames" attr.data-pii="{{ isPII ? 'value' : 'none' }}" #input>{{ displayValue }}</span>
+  @if (showCog) {
+    <button
+      #append
+      class="{{bem('cog')}} rl-icon settings"
+      (click)="onCogClick.emit(party)"
+      #cog
+      rl-test="editParty"
+      title="{{ 'party.edit' | translate }}"
+      type="button"
+    ></button>
+  }
+</rl-text-input>

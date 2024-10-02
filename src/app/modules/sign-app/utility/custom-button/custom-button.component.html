@@ -1,0 +1,28 @@
+<button [type]="btnType"
+  [class]="btnClass"
+  (click)="handleClick($event)"
+  [attr.disabled]="(isDisabled || isLoading) ? true : null"
+  aria-live="polite"
+  >
+  <div [class.visible]="!isLoading" class="text-wrapper">
+    <div class="centered">
+      <com class="default-text"
+        [key]="defaultTranslation?.key"
+        [params]="defaultTranslation?.params">
+      </com>
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <div [class.visible]="isLoading" class="loader-wrapper">
+    <com class="loading-text"
+      [key]="loadingTranslation?.key"
+      [params]="loadingTranslation?.params">
+    </com>
+    @if (primaryButtonEnabled) {
+      <img class="loader" src="images/global-images/loading-button.svg"/>
+    }
+    @if (secondaryButtonEnabled) {
+      <img class="loader" src="images/global-images/loading-button-secondary.svg"/>
+    }
+  </div>
+</button>

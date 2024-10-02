@@ -1,0 +1,69 @@
+<rl-modal fakePath="manageViewers" rl-test="manage-viewers-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon share" role="presentation"></i>
+      <span translate>manage-viewers-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <p class="bold-700" rl-modal-body-part="heroText" rl-typography="bold"><com [key]="'manage-viewers-modal_subheading'"></com></p>
+      @if (parties.length != 0) {
+        <p class="walkthrough-text">
+          <com [key]="'manage-viewers-modal_walkthrough'"></com>
+        </p>
+      }
+      @if (parties.length == 0) {
+        <p class="walkthrough-text">
+          <com [key]="'manage-viewers-modal_walkthrough-no-parties'"></com>
+        </p>
+      }
+      <div class="parties-container">
+        @for (party of parties; track party) {
+          <div [ngClass]="getColorClass(party)" [style.border]="getPartyBorder(party)" class="party">
+            <div class="party-container">
+              <div class="details">
+                <div class="party-email">
+                  <span>{{party.email}}</span>
+                </div>
+                <div class="party-status">
+                  @if (party.status != 'INVITED') {
+                    <span class="waiting">
+                      <span class="rl-icon doc-viewed"></span><com [key]="'manage-viewers-modal_status-viewed'"></com>
+                    </span>
+                  }
+                  @if (party.status == 'INVITED') {
+                    <span class="ready">
+                      <span class="rl-icon doc-unviewed"></span><com [key]="'manage-viewers-modal_status-not-viewed'"></com>
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="party-buttons">
+                <div [class.hide]="binder.status != 'SIGN_IN_PROGRESS'" class="reminder-btn" [class.disabled]="isReminderDisabled(party)" (click)="sendReminder(party)">
+                  <com [key]="'Manage-modal_manage-signers-send-reminder'"></com>
+                </div>
+                <div class="delete-btn-container delete-btn-desktop">
+                  <span (click)="removeViewer($event, party)" class="rl-icon trash-bin"></span>
+                </div>
+              </div>
+            </div>
+            <div class="delete-btn-container delete-btn-mobile">
+              <span (click)="removeViewer($event, party)" class="rl-icon trash-bin"></span>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="bottom-buttons">
+        <button rl-test="send-reminder-all" [class.disabled]="reminderBtnsDisabled" [class.hide]="binder.status != 'SIGN_IN_PROGRESS' || parties.length == 0" (click)="sendReminderToAll()" class="btn btn-secondary">
+          <com [key]="'manage-viewers-modal_action-invite-all'"></com>
+        </button>
+        <button (click)="gotoInviteViewersModal()" class="btn btn-primary">
+          <com [key]="'manage-viewers-modal_action-invite-new'"></com>
+        </button>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

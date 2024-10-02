@@ -1,0 +1,47 @@
+var map = {
+	"./en.json": [
+		1489,
+		"build_i18n_en_json"
+	],
+	"./es.json": [
+		7096,
+		"build_i18n_es_json"
+	],
+	"./fr.json": [
+		8116,
+		"build_i18n_fr_json"
+	],
+	"./logoIpsum.json": [
+		2475,
+		"build_i18n_logoIpsum_json"
+	],
+	"./nl.json": [
+		5793,
+		"build_i18n_nl_json"
+	],
+	"./pt.json": [
+		687,
+		"build_i18n_pt_json"
+	],
+	"./rlus.json": [
+		2156,
+		"build_i18n_rlus_json"
+	]
+};
+function webpackAsyncContext(req) {
+	if(!__webpack_require__.o(map, req)) {
+		return Promise.resolve().then(() => {
+			var e = new Error("Cannot find module '" + req + "'");
+			e.code = 'MODULE_NOT_FOUND';
+			throw e;
+		});
+	}
+
+	var ids = map[req], id = ids[0];
+	return __webpack_require__.e(ids[1]).then(() => {
+		return __webpack_require__.t(id, 3 | 16);
+	});
+}
+webpackAsyncContext.keys = () => (Object.keys(map));
+webpackAsyncContext.id = 8834;
+module.exports = webpackAsyncContext;

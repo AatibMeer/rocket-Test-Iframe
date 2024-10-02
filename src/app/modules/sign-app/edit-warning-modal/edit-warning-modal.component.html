@@ -1,0 +1,21 @@
+<rl-modal fakePath="editWarning" rl-test="edit-warning-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <span translate>edit-warning-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <div class="content-container">
+        <h3 class="content-heading left-aligned"><com [key]="'edit-warning-modal_second-heading'"></com></h3>
+        <p class="left-aligned"><com [key]="'edit-warning-modal_main_paragraph'"></com></p>
+        <div class="bottom-buttons">
+          <button class="btn btn-primary e2e_yes-edit-doc-button" (click)="continueToEdit()"><com [key]="'edit-warning-modal_continue'"></com></button>
+          <button class="btn btn-secondary" (click)="backToEditModal()"><com [key]="'edit-warning-modal_back'"></com></button>
+        </div>
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

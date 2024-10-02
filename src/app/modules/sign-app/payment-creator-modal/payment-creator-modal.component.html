@@ -1,0 +1,28 @@
+<rl-modal fakePath="payment/createAgreement" rl-test="payment-details">
+  <rl-modal-header>
+    @if (showBackButton) {
+      <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    }
+    <h1 rl-modal-title rl-typography="heading">
+      {{ modalHeader | translate }}
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header>
+  <rl-modal-body>
+    <rl-payment-agreement-creator
+      #paymentAgreementCreator
+      [paymentAgreement]='paymentAgreement'
+      [currentUserPartyID]='currentUserPartyId'
+      [currentUserPartyId]='currentUserPartyId'
+      [isLawyer]='userIsLawyer'
+      [bindersBaseUrl]='bindersBaseUrl'
+      [peerPaymentsBaseUrl]='peerPaymentsBaseUrl'
+      [rlAccessToken]='rlAccessToken'
+      (stepChanged)="onStepChange($event)"
+      (agreementCreated)="onSuccess($event)"
+      (agreementCreatorError)="onError()"
+      (editAgreement)="editAgreement($event)"
+      rl-test='payment-agreement-creator-wc'
+    ></rl-payment-agreement-creator>
+  </rl-modal-body>
+</rl-modal>

@@ -1,0 +1,22 @@
+@if (hasEnabledLayoutForCompletedDocuments()) {
+  <rl-copy-document-actions-layout headerIcon="doc-view">
+    <div class="heading" translate [translateParams]="{documentName: binder.documents[0].name}">
+      action-modal_contextual-heading_complete
+    </div>
+    <div class="description-primary" translate>action-modal_contextual-description_complete</div>
+    <div class="description-secondary" translate>action-modal_contextual-description_complete-secondary</div>
+  </rl-copy-document-actions-layout>
+}
+
+@if (hasEnabledLayoutForCopiedDocuments()) {
+  <rl-copy-document-actions-layout
+    headerIcon="edit-doc"
+    [primaryCta]="activatedCustomActionsModal.actions[0]"
+    [secondaryCta]="activatedCustomActionsModal.actions[1]"
+    (ctaClick)="invokeAction($event)">
+    <div class="heading">{{activatedCustomActionsModal.heading}}</div>
+    <div class="description-primary">{{activatedCustomActionsModal.description}}</div>
+  </rl-copy-document-actions-layout>
+}
+
+

@@ -1,0 +1,26 @@
+<ng-container [formGroup]="formGroup">
+  <rlng-input [class]="bem('name')" [control-id]="nameID" formControlName="name" rl-test="party-edit-form-name" #name>
+    <div #label data-label rl-test="party-edit-form-name-label" translate>party-edit-form.name-label</div>
+    <rl-text-input data-control [color]="name.invalid ? 'error' : 'secondary'">
+      <input autocomplete="name" name="name" #input [attr.aria-describedby]="name.messagesID" [attr.data-pii]='isPII ? "value" : "none"' [id]="name.id" rl-test="party-edit-form-name-input" formControlName="name">
+      <i #append class="rl-icon alert-info {{bem('alert-icon')}}" [hidden]="!name.invalid" role="presentation"></i>
+    </rl-text-input>
+    <div #messages [id]="name.messagesID" data-messages rl-typography="error">
+      @for (validator of nameNamedErrors; track validator; let index = $index) {
+        <div [hidden]="!name.showErrorMessage(validator, nameNamedErrors.slice(0, index))">{{ nameErrorMessages[validator] }}</div>
+      }
+    </div>
+  </rlng-input>
+  <rlng-input [class]="bem('email')" [control-id]="emailID" formControlName="email" rl-test="party-edit-form-email" #email>
+    <div #label data-label rl-test="party-edit-form-email-label" translate>party-edit-form.email-label</div>
+    <rl-text-input data-control [color]="email.invalid ? 'error' : 'secondary'">
+      <input autocomplete="email" type="email" name="email" trim="blur" #input [attr.aria-describedby]="email.messagesID" [attr.data-pii]='isPII ? "value" : "none"' [id]="name.id" rl-test="party-edit-form-email-input" formControlName="email" inputmode="email">
+      <i #append class="rl-icon alert-info {{bem('alert-icon')}}" [hidden]="!email.invalid" role="presentation"></i>
+    </rl-text-input>
+    <div #messages [id]="email.messagesID" data-messages rl-typography="error">
+      @for (validator of emailNamedErrors; track validator; let index = $index) {
+        <div [hidden]="!email.showErrorMessage(validator, emailNamedErrors.slice(0, index))">{{ emailErrorMessages[validator] }}</div>
+      }
+    </div>
+  </rlng-input>
+</ng-container>

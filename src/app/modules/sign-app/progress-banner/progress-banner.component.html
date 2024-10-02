@@ -1,0 +1,35 @@
+<div class="progress-banner">
+  <div class="content-wrapper">
+    <span class="padded-text">
+      <span><com [key]="'progress-banner_step-counter'" [params]="getStepNumber()"></com></span>
+    </span>
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar" [class.complete]="getProgressPercent() == '100%'" [ngStyle]="{width: getProgressPercent()}"></div>
+    </div>
+  </div>
+  <div class="button-wrapper-bottom">
+    <div class="inner-wrapper">
+      <button type="button" class="btn btn-secondary"
+        (click)="cancelSigning()"
+        [comContent]="'progress-banner_cancel'">
+      </button>
+      @if (!isComplete()) {
+        <button type="button" rl-test="finish-btn" class="btn btn-primary right-aligned"
+          (click)="this.nextStep.emit()"
+          [comContent]="'progress-banner_next-input'">
+        </button>
+      }
+      @if (isComplete()) {
+        <custom-button
+          rl-test="finish-btn"
+          (onClick)="submitSignatures()"
+          [btnType]="'button'"
+          [btnClass]="'btn btn-primary right-aligned'"
+          [defaultTranslation]="{key: 'progress-banner_finish'}"
+          [loadingTranslation]="{key: 'progress-banner_sending'}"
+          [isLoading]="sendingSignatures">
+        </custom-button>
+      }
+    </div>
+  </div>
+</div>

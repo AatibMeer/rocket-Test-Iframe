@@ -1,0 +1,79 @@
+@if (showGlobalLoader) {
+  <div class="overlays">
+    <img class="loading-spinner" src="images/signapp/rolling.svg" width="200" height="200" alt="Loading">
+  </div>
+}
+
+@if (documents) {
+  <div [class.modal-active]="isModalActive()">
+    <div class="alerts-container">
+      <rl-alerts-container></rl-alerts-container>
+    </div>
+    <div #topBannerContainer class="top-banner-container">
+      <div class="top-banner">
+        <!-- Notifications -->
+        <notification-message [pushDown]="progressBarIsVisible() || signatureBuilderModeEnabled || alertShown"></notification-message>
+        <!-- Alerts -->
+        <!-- Walkthrough message that appears on top. -->
+        @if (signatureBuilderModeEnabled && !inputsNeedRepositioningAfterDocumentEdit) {
+          <sign-summary
+            #signBanner
+            (onShowInviteCollaborators)="onInviteCollaboratorsBtnClicked()"
+            (onSavedChanges)="onSavedChanges()"
+            (onShowWarning)="onShowFinaliseWarning()"
+            (showModal)="showModal($event)">
+          </sign-summary>
+        }
+        <!-- Instruction banner -->
+        <sticky-banner [msg]="stickyBannerMsg"></sticky-banner>
+        <!-- Progress Banner -->
+        @if (progressBarIsVisible()) {
+          <progress-banner
+            #progressBanner
+            [@slideUpDown]
+            (nextStep)="docPreview.highlightNextInput()"
+            [numberOfDocuments]="documents?.length"
+            (showActionsModal)="showModal('actionModal')"
+            (showInvitationModal)="showModal('inviteCollaboratorsModal')"
+            [documentPreview]="docPreview">
+          </progress-banner>
+        }
+        @if (inputEditModeEnabled) {
+          <input-editor
+            (updateBinder)="saveChanges()"
+            (showModal)="showModal($event)"
+            (stickyMessage)="this.stickyBannerMsg = $event">
+        </input-editor>
+      }
+    </div>
+    <div class="action-button-container"
+      [class.push-down]="progressBarIsVisible() || signatureBuilderModeEnabled || alertShown || isViewerRole()">
+      @if (!this.signatureBuilderModeEnabled && !documentEditorModeEnabled && !signingModeEnabled && actionModalEnabledFromPartner) {
+        <div
+          (click)="showModal('actionModal')"
+          class="action-btn">
+          <span class="rl-icon burger"></span>
+          <com [key]="'sign-dashboard_actions-btn'"></com>
+        </div>
+      }
+    </div>
+  </div>
+  <!-- Actual documents start here-->
+  @if (!documentEditorModeEnabled) {
+    <doc-preview #docPreview
+      [signerDataIsMissing]="signerDataIsMissing"
+      (showAddSignerDataModal)="showModal('addSignerDataModal')"
+      [progressActive]="this.binder.status == 'IN_PREPARATION' || progressBarIsVisible()"
+      (openSigning)="openSigningModal($event)"
+      (openInputEditor)="openInputEditor()"
+      (signatureInputsUpdate)="signatureInputs = $event">
+    </doc-preview>
+  }
+  <!-- Actual documents end here-->
+
+  <!-- This container will load the rest of the app modals (app-modals component) -->
+  <ng-container #container></ng-container>
+</div>
+}
+
+<router-outlet></router-outlet>

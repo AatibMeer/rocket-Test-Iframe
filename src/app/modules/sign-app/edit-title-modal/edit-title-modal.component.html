@@ -1,0 +1,29 @@
+<rl-modal fakePath="editTitle" rl-test="rename-modal">
+	<rl-modal-header-branded product="sign">
+		<h1 rl-modal-title rl-typography="heading">
+			<i class="header-icon rl-icon review-invite" role="presentation"></i>
+			<span translate>edit-title_heading</span>
+		</h1>
+		<rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+	</rl-modal-header-branded>
+	<rl-modal-body>
+		<div class="modal-content">
+			<div class="content-container">
+				<div class="custom-message">
+					<p class="content-heading">
+						<com [key]="'edit-title_doc-title'"></com>
+					</p>
+					<input class="party-form-control margin-top" [(ngModel)]="docTitle" name="docTitle" id="docTitle"
+						type="text">
+				</div>
+				<div class="bottom-buttons">
+					<custom-button (onClick)="updateDocumentName()" [btnType]="'button'" [btnClass]="'btn btn-primary'"
+						[defaultTranslation]="{key: 'edit-title_done'}" [loadingTranslation]="{key: 'edit-title_done'}"
+						[isLoading]="actionInProgress" [isDisabled]="actionInProgress">
+					</custom-button>
+				</div>
+			</div>
+		</div>
+	</rl-modal-body>
+	<rl-modal-footer></rl-modal-footer>
+</rl-modal>

@@ -1,0 +1,10 @@
+@if (notification) {
+  <div [class.push-down]="pushDown" class="notification">
+    <p [class.alwaysVisible]="!notification.mobileKey" class="desktop-messages">
+      <com [key]="notification.key" [params]="notification.params"></com>
+    </p>
+    <p class="mobile-messages">
+      <com [key]="notification.mobileKey" [params]="notification.mobileParams"></com>
+    </p>
+  </div>
+}

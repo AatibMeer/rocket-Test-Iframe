@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1275"
+   height="1650"
+   viewBox="0 0 1148.483 1259.05"
+   version="1.1"
+   id="svg276"
+   sodipodi:docname="tempdoc.svg"
+   inkscape:version="1.2 (dc2aeda, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview278"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.54777856"
+     inkscape:cx="604.25878"
+     inkscape:cy="438.13325"
+     inkscape:window-width="1728"
+     inkscape:window-height="966"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg276" />
+  <defs
+     id="defs266">
+    <filter
+       x="-0.016888524"
+       y="-0.014856542"
+       width="1.033777"
+       height="1.0317765"
+       id="A">
+      <feOffset
+         dy="2"
+         in="SourceAlpha"
+         id="feOffset250" />
+      <feGaussianBlur
+         stdDeviation="6"
+         id="feGaussianBlur252" />
+      <feColorMatrix
+         values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.175979393 0"
+         result="C"
+         id="feColorMatrix254" />
+      <feMerge
+         id="feMerge260">
+        <feMergeNode
+           in="C"
+           id="feMergeNode256" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode258" />
+      </feMerge>
+    </filter>
+    <clipPath
+       id="B">
+      <path
+         d="M11.97 9.907h852.767v969.368H11.97z"
+         fill="none"
+         id="path263" />
+    </clipPath>
+  </defs>
+  <g
+     transform="matrix(1.3467564,0,0,1.533249,-16.11606,-128.81077)"
+     clip-path="url(#B)"
+     fill="none"
+     id="g274">
+    <g
+       transform="translate(12,10)"
+       filter="url(#A)"
+       id="g272">
+      <path
+         d="M 0,0 V 969.27 H 852.65 V 0 Z"
+         fill="#ffffff"
+         id="path268" />
+      <path
+         d="m 242,109 v 17.267 H 610.772 V 109 Z M 140.425,215.836 v 12 h 583.418 v -12 z m 0,58.264 v 12 h 583.418 v -12 z m 0,56.12 v 12 h 583.418 v -12 z m 0,56.126 v 12 h 583.418 v -12 z"
+         fill="#dddddd"
+         id="path270" />
+    </g>
+  </g>
+</svg>

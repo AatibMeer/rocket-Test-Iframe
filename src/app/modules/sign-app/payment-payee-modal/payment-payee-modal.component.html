@@ -1,0 +1,51 @@
+<rl-modal fakePath="payment/createAgreement/payee" rl-test="payment-select-payee">
+  <rl-modal-header-branded product="wallet">
+    <rl-modal-header-back rl-modal-header-widget="left"></rl-modal-header-back>
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="rl-icon card" role="presentation"></i>
+      {{ 'payment-payee-modal.heading' | translate }}
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <p
+      [class]="bem('hero')"
+      rl-modal-body-part="heroText"
+      rl-modal-description
+      class="bold-700"
+      translate
+    >payment-payee-modal.primary-text</p>
+    <ul [class]="bem('party-list')" rl-modal-body-part="container">
+      @for (party of parties; track party; let i = $index) {
+        <li>
+          <rl-party
+            [color]="party.metaData.style.background"
+            [checked]="party.reference === selectedParty?.reference"
+            (onCogClick)="editParty($event)"
+            [party]="party"
+            rl-test="payment-payee-party-{{i}}"
+            [showCog]="true"
+            [showRadio]="true"
+            (toggle)="selectParty($event)"
+          ></rl-party>
+        </li>
+      }
+    </ul>
+    <div rl-modal-body-part="actionsContainer">
+      <custom-button
+        btnClass="btn btn-primary"
+        (onClick)="next()"
+        [isDisabled]="!selectedParty"
+        rl-modal-body-part="primaryAction"
+        rl-test="payment-payee-next"
+      >{{ 'payment-payer-modal.next' | translate }}</custom-button>
+      <button
+        class="btn btn-secondary"
+        (click)="addNewParty()"
+        rl-modal-body-part="secondaryAction"
+        rl-test="payment-payee-add"
+        ><i class="rl-icon add {{bem('add-icon')}}" role="presentation"></i>
+      {{ 'payment-payee-modal.add-new-payer' | translate }}</button>
+    </div>
+  </rl-modal-body>
+</rl-modal>

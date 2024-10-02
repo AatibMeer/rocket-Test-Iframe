@@ -1,0 +1,121 @@
+<rl-modal fakePath="editInput" rl-test="edit-input-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      @if (input?.type == 'DATE_SIGNED') {
+        <i class="header-icon rl-icon toolbar-calendar" role="presentation"></i>
+        <span translate>edit-input-modal_add-date-header</span>
+      }
+      @if (input?.type == 'SIGNATURE_TEXT') {
+        <i class="header-icon rl-icon user-input" role="presentation"></i>
+        <span translate>edit-input-modal_select-signer-header</span>
+      }
+      @if (input?.type == 'INITIALS') {
+        <i class="header-icon rl-icon toolbar-initial" role="presentation"></i>
+        <span translate>edit-input-modal_add-initials-header</span>
+      }
+      @if (input?.type == 'CUSTOM_TEXT') {
+        <i class="header-icon rl-icon toolbar-textbox" role="presentation"></i>
+        <span translate>edit-input-modal_edit-custom-text-header</span>
+      }
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-wrapper modal-content">
+      @if (input?.type == 'DATE_SIGNED') {
+        <h4 class="modal-content-heading"><com [key]="'edit-input-modal_date-heading'"></com></h4>
+      }
+      @if (input?.type == 'SIGNATURE_TEXT') {
+        <h4 class="modal-content-heading"><com [key]="'edit-input-modal_signature-heading'"></com></h4>
+      }
+      @if (input?.type == 'INITIALS') {
+        <h4 class="modal-content-heading"><com [key]="'edit-input-modal_initials-heading'"></com></h4>
+      }
+      @if (input?.type == 'CUSTOM_TEXT') {
+        <h4 class="modal-content-heading"><com [key]="'edit-input-modal_question-heading'"></com></h4>
+      }
+      <ul class="parties-list" rl-party-group>
+        @for (party of parties; track party) {
+          <li>
+            <rl-party
+              [checked]="party?.reference === selectedParty?.reference"
+              [color]="party?.metaData.style.background"
+              [defaultDisplayValue]="'edit-input-modal_party-name-placeholder' | translate:{number: party?.missingLegalNameIndex}"
+              (onCogClick)="openEditModal($event)"
+              [party]="party"
+              [showCog]="binder?.status == 'IN_PREPARATION'"
+              [showRadio]="true"
+              (toggle)="selectParty($event)"
+            ></rl-party>
+          </li>
+        }
+      </ul>
+      @if (parties.length < 100) {
+        <button (click)="toggleEditSignerModal()" rl-test="add-new-signer" class="btn btn-secondary btn-block add-new-signer">
+          <span class="rl-icon add"></span>
+          <com [key]="'edit-input-modal_add-new-signer'"></com>
+        </button>
+      }
+      @if (input?.type == 'CUSTOM_TEXT') {
+        <div class="custom-message">
+          <div class="custom-message-label">
+            <com [key]="'edit-input-modal_edit-custom-text-label'"></com>
+          </div>
+          <div>
+            <textarea
+              [class.invalid]="checkPromptLengthError()"
+              [comPlaceholder]="'edit-input-modal_edit-custom-text-prompt'"
+              [(ngModel)]="prompt"
+              name="custom-message" cols="20" rows="10">
+            </textarea>
+            @if (checkPromptLengthError()) {
+              <span class="rl-icon dispute"></span>
+            }
+            <div class="char-counter" [ngClass]="{'over-limit': checkPromptLengthError()}">
+              <span>{{prompt.length}}/150</span>
+            </div>
+          </div>
+          <div [ngClass]="{'over-limit': checkPromptLengthError()}" class="text-length-error">
+            <com [key]="'edit-input-modal_text-to-long'"></com>
+          </div>
+        </div>
+      }
+      @if (input?.type == 'CUSTOM_TEXT' || input?.type == 'INITIALS') {
+        <div class="required-button">
+          <input type="checkbox" id="input-required" name="input-required" [checked]="!input.optional" (change)="input.optional = !input.optional">
+          <label class="required-label" for="input-required">
+            <span class="rl-icon checkbox-check doc-man-checkbox"></span>
+            <com [key]="'edit-input-required-text'"></com>
+          </label>
+        </div>
+      }
+      <div class="bottom-buttons">
+        @if (input?.position.type == 'PLACEHOLDER') {
+          <custom-button
+            (onClick)="updatePlaceholderInput()"
+            [btnType]="'button'"
+            [btnClass]="'btn btn-primary'"
+            [defaultTranslation]="{key: 'edit-input-modal_select-signer'}"
+            [loadingTranslation]="{key: 'edit-input-modal_saving'}"
+            [isLoading]="actionInProgress">
+          </custom-button>
+        }
+        @if (input?.position.type != 'PLACEHOLDER') {
+          <button
+            [class.disabled]="checkPromptLengthError() && input?.type == 'CUSTOM_TEXT'"
+            [disabled]="checkPromptLengthError() && input?.type == 'CUSTOM_TEXT'"
+            (click)="updateInputAndCloseModal()"
+            class="btn btn-primary">
+            @if (input?.type != 'SIGNATURE_TEXT') {
+              <com [key]="'edit-input-modal_continue'"></com>
+            }
+            @if (input?.type == 'SIGNATURE_TEXT') {
+              <com [key]="'edit-input-modal_select-signer'"></com>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

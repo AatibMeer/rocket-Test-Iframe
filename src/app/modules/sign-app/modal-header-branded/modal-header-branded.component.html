@@ -1,0 +1,18 @@
+<rl-modal-header>
+  @if (showWidgets) {
+    <div rl-modal-header-widget="left">
+      <ng-content select="[rl-modal-header-widget=left]"></ng-content>
+    </div>
+  }
+  @if (canShowLogo) {
+    <rl-logo [product]="product" rl-test="modal-header-logo" [style]="logoURL"></rl-logo>
+  }
+  <div [rl-inclusively-hidden]="canShowLogo ? 'visualOnly' : 'none'">
+    <ng-content></ng-content>
+  </div>
+  @if (showWidgets) {
+    <div rl-modal-header-widget="right">
+      <ng-content select="[rl-modal-header-widget=right]"></ng-content>
+    </div>
+  }
+</rl-modal-header>

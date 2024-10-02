@@ -1,0 +1,57 @@
+<rl-modal fakePath="export" rl-test="export-modal">
+  <rl-modal-header-branded product="sign">
+    <h1 rl-modal-title rl-typography="heading">
+      <i class="header-icon rl-icon cloud-download" role="presentation"></i>
+      <span translate>export-document-modal_heading</span>
+    </h1>
+    <rl-modal-header-close rl-modal-header-widget="right"></rl-modal-header-close>
+  </rl-modal-header-branded>
+  <rl-modal-body>
+    <div class="modal-dialog modal-content">
+      <p class="title" comContent="export-document-modal_header-title"></p>
+
+      <div class="buttons-wrapper">
+        @if (!wordDocumentDownloading) {
+          <button
+            class="btn btn-secondary"
+            (click)="exportWord()"
+            [disabled]="wordDocumentDownloading || pdfDocumentDownloading">
+            <span class="rl-icon word-doc"></span>
+            <com key="export-document-modal_docx-button"></com>
+          </button>
+        }
+        @if (wordDocumentDownloading) {
+          <custom-button
+            class="btn"
+            btnType="button"
+            btnClass="btn btn-secondary right-aligned"
+            [defaultTranslation]="{key: 'export-document-modal_docx-button'}"
+            [loadingTranslation]="{key: 'export-document-modal_docx-button-exporting'}"
+            [isLoading]="true">
+          </custom-button>
+        }
+
+        @if (!pdfDocumentDownloading) {
+          <button
+            class="btn btn-secondary"
+            (click)="exportPdf()"
+            [disabled]="wordDocumentDownloading || pdfDocumentDownloading">
+            <span class="rl-icon pdf-doc"></span>
+            <com key="export-document-modal_pdf-button"></com>
+          </button>
+        }
+        @if (pdfDocumentDownloading) {
+          <custom-button
+            class="btn"
+            btnType="button"
+            btnClass="btn btn-secondary right-aligned"
+            [defaultTranslation]="{key: 'export-document-modal_pdf-button'}"
+            [loadingTranslation]="{key: 'export-document-modal_pdf-button-exporting'}"
+            [isLoading]="true">
+          </custom-button>
+        }
+      </div>
+    </div>
+  </rl-modal-body>
+  <rl-modal-footer></rl-modal-footer>
+</rl-modal>

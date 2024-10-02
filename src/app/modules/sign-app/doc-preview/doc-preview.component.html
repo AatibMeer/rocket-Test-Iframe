@@ -1,0 +1,88 @@
+<div [class.signing]="progressActive" class="documents-container">
+  @for (document of allDocuments(); track trackDocsBy(docIndex, document); let firstDoc = $first; let docIndex = $index) {
+    <div
+      [class.compact]="compact"
+      [attr.data-doc-name]="document.name"
+      class="single-document">
+      <div [hidden]="!document.pages" class="doc-wrapper">
+        @for (page of document.pages; track trackPagesBy(idx, page); let firstPage = $first; let idx = $index) {
+          <div class="doc-pages">
+            <div class="page-container">
+              @if (!page.src) {
+                <img class="sign-loader" width="200" height="200" src="images/signapp/tempdoc.svg">
+              }
+              @if (page.src) {
+                <img
+                  (load)="pageLoaded(page)"
+                  class="doc-img noselect"
+                  (click)="pageClicked($event)"
+                  [src]="page.src"
+                  [attr.data-page-id]="page.id"
+                  [attr.data-doc-id]="document.id"
+                  alt="Page: {{idx+1}} of {{document.pages?.length}} of {{document.name}}">
+              }
+              @if (binder.status == 'IN_PREPARATION' && page.src && page.loaded && !signModeEnabled) {
+                <div>
+                  @for (newInput of inputsInPages[page.id]; track trackBy($index, newInput)) {
+                    <div>
+                      @if (newInput) {
+                        <new-input
+                          [@animateModalChildren]
+                          [binder]="binder"
+                          [inputId]="newInput.id"
+                          [zoomLevel]="zoomLevel || 1"
+                          [imgClass]="page.src ? '.doc-img' : '.sign-loader'"
+                          (updateDefaultInputSize)="updateInputSize($event)"
+                          (openInputEditor)="openEditor($event)"
+                          (inputClicked)="onInputClicked()">
+                        </new-input>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+              @if (signModeEnabled || binder.status == 'SIGN_IN_PROGRESS' || (binder.status == 'REVIEW_AND_SHARE' && page.src && page.loaded)) {
+                <div>
+                  @for (input of inputsInPages[page.id]; track input) {
+                    <div>
+                      @if (input) {
+                        <user-input
+                          [input]="input"
+                          [requestedDateFormat]="binder?.dateFormat || document?.dateFormat || 'MMM DD, YYYY'"
+                          [highlight]="input == highlightedInput"
+                          [highlightedInputClicks]="highlightedInputClicks"
+                          [datepickerLanguage]="datepickerLanguage"
+                          (valueChange)="editInput(input, $event)"
+                          (clicked)="editInput(input)">
+                        </user-input>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+            <div class="bottom-pagination">
+              <span class="page-count">
+                <com key="doc-preview_page-count-indicator"
+                  [params]="{number:idx+1, total:document.pages?.length}">
+                </com>
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+  @if (toolboxTooltipShown) {
+    <toolbox-tooltip #toolboxTooltip
+      [zoomLevel]="zoomLevel || 1"
+      [clientWidth] = "clientWidth"
+      [fixedOffset] = "fixedOffset"
+      [@animateModalChildren]
+      [inputDimensions]="inputDimensions"
+      (hideTooltip)="toolboxTooltipShown = false"
+      [binder]="binder"
+      [pageClickEvent]="pageClickEvent">
+    </toolbox-tooltip>
+  }
+</div>

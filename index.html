@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"><script src="/assets/javascripts/main.js"></script><link rel="stylesheet" href="/assets/stylesheets/style.css"><script type="module" src="build/rocket-lawyer-web-components.esm.js"></script><link rel="stylesheet" href="build/rocket-lawyer-web-components.css"></head><body><div class="header"><a href="/"><div class="logo"></div></a></div><div class="content"><div class="sidebar"><h1>Some sidebar component</h1><ul><li><span>Select the brand for binder:</span><select id="brand-selector"><option value="94afa89f-4dbd-44a7-9d35-7361e8059293">RL US</option><option value="7375f6ac-6c6c-4343-b9c1-42d027016171">RL FR</option><option value="1943165f-ef48-408b-a162-45f890c98d91">RL NL</option><option value="5ded0acb-2cd2-405f-9568-996e480ff466">RL ES</option><option value="7aef4ed2-4964-42fb-ad69-e8ec6ab88333">RL UK</option><option value="862c9e07-b2be-4aea-953b-f09f8bf87fcb">RL BR</option><option value="5dd096ba-5a7a-49fb-8828-e3c1a853f60b">Teemsi</option><option value="9088c203-9857-4b33-95a0-2a2373e390b4">ZZP</option><option value="4b7d85b1-c2c9-42ab-ad0e-1de2625bfe9e">Keycheck</option><option value="b3aba760-6813-4955-a079-48d9b9f1700d">Lawrina</option></select></li><li><a href="/new" id="new-binder">Create new binder</a></li><li><a href="/new-placeholder-binder" id="new-binder-with-placeholders">Create new binder with placeholder inputs</a></li><li><span>Create a new binder with the interview:</span><select id="template-selector"><option value="04d9d0ba-3113-40d3-9a4e-e7b226a72154">Lease Agreement</option></select><button onclick="createInterview()">Create</button></li></ul></div><div class="main-content"><div class="explanation"><h1>This is a test website that embeds Doc Man v2.</h1><p>It's supposed to help us visualize what a 3rd party would do when they embed Doc Man v2.<br />
+It can also be used as a development/testing ground.</p></div><rl-file-upload http-method="POST" validationFailed="validationFailed(event)" responseReceived="handleUpload(event)" url="/upload" content-type="application/pdf"></rl-file-upload></div></div><script>(function () {
+  var headerHeight = document.querySelector('.header').clientHeight;
+  var explanationElHeight = document.querySelector('.explanation').clientHeight;
+  var calculatedIframeHeight = document.documentElement.clientHeight - headerHeight - explanationElHeight - 27;
+  let iframe = document.querySelector('iframe');
+  if(!iframe) return;
+  document.querySelector('iframe').style.height = `${calculatedIframeHeight}px`;
+  window.addEventListener('message', function(event) {
+      switch(event.data) {
+          case "NDM_FIRST_3_PAGES_LOADED":
+              console.log("NDM_FIRST_3_PAGES_LOADED received");
+              break;
+          case "NDM_LOAD_STARTED":
+              console.log("NDM_LOAD_STARTED received");
+              break;
+          default:
+              if(event.data.action === "changeAnswers"){
+                  var params = new URLSearchParams(window.location.search);
+                  window.location.href = `/interview?interviewId=${params.get("interviewId")}&partyId=${params.get("partyId")}`;
+              }
+              console.log(event);
+              break;
+      }
+  }, false);
+})();</script><script>let el = document.querySelector('rl-file-upload');
+  if(el) {
+  el.addEventListener('success', (e) => {
+    if(e && e.detail) window.location.href = e.detail;
+  });
+}</script></body></html>

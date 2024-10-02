@@ -1,0 +1,212 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+/**
+These variables don't start with an underscore (or hyphen) so they are available to other SCSS file using
+@use "src/global/theme" and then theme.${variableName}. They just contain strings so aren't useful on their own.
+
+They should be used with define-root-theme-variable() to create theme variables ONLY ONCE in variables.scss,
+and with use-root-theme-variable() to inject a root theme CSS variable.
+ */
+/**
+The actual map of theme variables to CSS values. This shouldn't be accessed directly outside of this file
+(which is why it starts with an underscore).
+
+define-root-theme-variable() uses these entries to create CSS variables to contain these values. They can then be used
+in components with theme.use-root-theme-variable().
+ */
+/**
+Make a CSS variable name for theme variables.
+
+For root variables it will return "--rl-$property".
+For component variables it will return "--rl[--$modifier1[--$modifierN]]--$property".
+ */
+/**
+Create a single-entry key:value map where key is a theme CSS variable name and value is its value.
+ */
+/**
+Flattens out a nested map. Entries from flattened maps will get their key names from joining the ancestor keys with "--".
+ */
+/**
+Creates a flattened CSS variable map from a (potentially nested) map of properties. The variables will be prefixed with
+"--rl-$component".
+ */
+/**
+The mixin for creating theme CSS variables and having them appear in the CSS.
+
+The variables will be prefixed with "--rl-$component" onto the keys. Nested maps will be flattened, with the keys of
+ancestor maps concatenated with "--".
+
+eg.
+@include define-component-theme-variables("my-component", (
+  background-color: red,
+  color: black,
+  container: (
+    color: green,
+    font-size: 2em,
+    missing-info: (
+      border-color: orange,
+    ),
+  ),
+));
+
+produces:
+--rl-my-component--background-color: red;
+--rl-my-component--color: black;
+--rl-my-component--container--color: green;
+--rl-my-component--container--font-size: 2em;
+--rl-my-component--container--missing-info--border-color: orange;
+
+You can use other variables as values for real powerful theming. Look at using the use-theme-variable() function.
+*/
+/**
+Special mixin for defining a single root theme CSS variables. Use with one of the theme.$ variables.
+
+You probably don't need to use this outside of this file.
+ */
+/**
+Creates the var() syntax to use one of the theme CSS variables.
+
+$component is the component name (used with define-component-theme-variables).
+If you are accessing top-level variables then the next argument is that rule name.
+If you are accessing a variable which you nested with define-component-theme-variables, the second argument is a list of
+keys, with the third argument being the rule you wanted.
+
+eg.
+use-theme-variable("my-component", background-color); // var(--rl-my-component--background-color);
+use-theme-variable("my-component", "container" "missing-info", "border-color") // var(--rl-my-component--container--missing-info--border-color);
+ */
+/**
+Creates the var() syntax to use one of the root theme CSS variables. Use with one of the theme.$ variables.
+ */
+/**
+  Get a value from the default theme. This will return normal CSS values, so you should only use it when creating new
+  CSS variables whose value won't change with the root theme value.
+
+  Its main uses are:
+  * Internally for getting root CSS values when defining root theme CSS variables,
+  * When a component happens to use the same CSS value as defined in the root theme, but then transforms that value.
+
+  Example: button disabled color uses the default inverse text color from this function and then changes the alpha
+  value. If the inverse text color is changed by an external change to the --rl-text-inverse-color CSS variable, the
+  button color won't also change because it is not referencing that variable: it used the default color value directly
+  from the $_theme map. To reference the variable, use the use-theme-variable function.
+
+  In this example, a third party would have to change both the --rl-text-inverse-color AND
+  --rl-button--primary--disabled--color variables, so try not to use this function too often.
+ */
+/** Get a multiple of "standard" vertical spacing amounts adjusted for font-size. */
+/**
+  This is the color palette, you should never use any color that is outside of this palette.
+  All other components and files should only use existing colors from this file.
+  All names of colors are taken directly from the Foundation Design System.
+ */
+:root {
+  --rl-brand-primary: #990000;
+  /**
+    Foundation design swaps hover and pressed colors compared to old designs.
+    Also there are no longer separate active and focus colors.
+  */
+  --rl-action-primary-default: #d68021;
+  --rl-action-primary-hover: #ba6102;
+  --rl-action-primary-pressed: #e89338;
+  --rl-action-primary-disabled: #efcca6;
+  --rl-state-error-darkest: #8e1116;
+  --rl-state-error-darker: #be161d;
+  --rl-state-error-default: #ed1c24;
+  --rl-state-error-lighter: #f4777c;
+  --rl-state-error-lightest: #fbd2d3;
+  --rl-state-success-darkest: #355316;
+  --rl-state-success-darker: #476f1e;
+  --rl-state-success-default: #598b25;
+  --rl-state-success-lighter: #9bb97c;
+  --rl-state-success-lightest: #f3f9ec;
+  --rl-state-waiting-darkest: #945812;
+  --rl-state-waiting-darker: #c67618;
+  --rl-state-waiting-default: #f7931e;
+  --rl-state-waiting-lighter: #fabe78;
+  --rl-state-waiting-lightest: #fde9d2;
+  --rl-state-information-darkest: #124e94;
+  --rl-state-information-darker: #1868c6;
+  --rl-state-information-default: #1e82f7;
+  --rl-state-information-lighter: #78b4fa;
+  --rl-state-information-lightest: #d2e6fd;
+  --rl-state-new-alert: #0ea88b;
+  /**
+    Text colors.
+   */
+  --rl-text-header: #1a1a26;
+  --rl-text-body-primary: #3e3f4c;
+  --rl-text-body-secondary: #696a78;
+  --rl-text-body-tertiary: #9da0ac;
+  --rl-text-body-lightest: #ffffff;
+  --rl-background-section: #f7f7f8;
+  --rl-background-tooltip: #3e3f4c;
+  --rl-background-overlay: rgb(26, 26, 38, 0.5);
+  /* #1a1a26 + transparency */
+  --rl-background-section-lightest: #ffffff;
+  --rl-border-darker: #1a1a26;
+  --rl-border-subtle: #ccd1d9;
+  --rl-border-lightest: #ffffff;
+}
+
+:root {
+  --rl-brand-color: #990000;
+  --rl-vertical-spacing-1x: 0.8em;
+  --rl-action-color: #d68021;
+  --rl-action-active-color: #ba6102;
+  --rl-action-focus-color: #d68021;
+  --rl-action-hover-color: #e89338;
+  --rl-action-disabled-color: #efcca6;
+  --rl-link-color: #d68021;
+  --rl-link-active-color: #ba6102;
+  --rl-link-focus-color: #d68021;
+  --rl-link-hover-color: #e89338;
+  --rl-link-disabled-color: #efcca6;
+  --rl-link-visited-color: #d68021;
+  --rl-state-alert-color: #0ea88b;
+  --rl-state-error-color: #ed1c24;
+  --rl-state-error-lightest-color: #fbd2d3;
+  --rl-state-error-lighter-color: #f4777c;
+  --rl-state-error-darker-color: #be161d;
+  --rl-state-error-darkest-color: #8e1116;
+  --rl-state-information-color: #1e82f7;
+  --rl-state-information-lightest-color: #d2e6fd;
+  --rl-state-information-lighter-color: #78b4fa;
+  --rl-state-information-darker-color: #1868c6;
+  --rl-state-information-darkest-color: #124e94;
+  --rl-state-success-color: #598b25;
+  --rl-state-success-lightest-color: #f3f9ec;
+  --rl-state-success-lighter-color: #9bb97c;
+  --rl-state-success-darker-color: #476f1e;
+  --rl-state-success-darkest-color: #355316;
+  --rl-state-waiting-color: #f7931e;
+  --rl-state-waiting-lightest-color: #fde9d2;
+  --rl-state-waiting-lighter-color: #fabe78;
+  --rl-state-waiting-darker-color: #c67618;
+  --rl-state-waiting-darkest-color: #945812;
+  --rl-text-body-color: #3e3f4c;
+  --rl-text-body-secondary-color: #696a78;
+  --rl-text-body-tertiary-color: #9da0ac;
+  --rl-text-inverse-color: #ffffff;
+  --rl-text-header-color: #1a1a26;
+  --rl-background-section-color: #f7f7f8;
+  --rl-background-notification-color: #3e3f4c;
+  --rl-background-border-color: #1a1a26;
+  --rl-background-border-alternative-color: #ccd1d9;
+  --rl-background-shadow-color: #ededf0;
+  --rl-typography-body-size: 1.6em;
+  --rl-typography-body-weight: 400;
+  --rl-typography-body-strong-size: 1.6em;
+  --rl-typography-body-strong-weight: 600;
+  --rl-typography-font-family: "Open Sans", sans-serif;
+  --rl-typography-small-size: 1.4em;
+  --rl-typography-small-weight: 400;
+  --rl-typography-small-strong-size: 1.4em;
+  --rl-typography-small-strong-weight: 600;
+  --rl-typography-h1-size: 2.8em;
+  --rl-typography-h1-weight: 400;
+  --rl-typography-h2-size: 2.4em;
+  --rl-typography-h2-weight: 400;
+  --rl-typography-h3-size: 1.8em;
+  --rl-typography-h3-weight: 400;
+  --rl-transition-duration: 150ms;
+}
